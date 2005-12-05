@@ -1,0 +1,90 @@
+2005-11-29 Joe Friedrichsen <pengi.films@gmail.com>
+ * Makefile.am:
+     Proper building of the scripts.
+
+ * configure.ac:
+     Smarter checking of dependencies (required vs. optional).
+     Configure-time substitution into lib-vidprofile (version
+          and pnmpsnr dependency).
+
+ * lib-vidprofile:
+     Added precho and check_optional_dependency.
+
+ * profile:
+     Added new precho function calls.
+
+ * vidpsnr:
+     Added new precho function calls.
+
+ * psnrcore:
+     Added new precho function calls.
+
+ * man pages:
+     Written and added; created with txt2tags (sf.net).
+
+2005-10-25 Joe Friedrichsen <pengi.films@gmail.com>
+ * lib-vidprofile:
+     Common functions and constants taken from the suite to create
+          a new library.
+
+ * profile:
+     Added -help option and formatted usage guide.
+     -psnr option now compares against the source video (not the
+          control video any longer); also, the entire video may be
+          used as a basis for PSNR calculation.
+     -snapshot now takes a snapshot of the source video (and didn't
+          before, only the control video).
+     -test handling considerably simplified and generalized. Tests
+          are put in a colon-spearated list and called according to
+          type. Allows full set of mpeg2enc options to be tested, and
+          inter-dependence calculations between any two numerical
+          options.
+     -errlog has a new default: /dev/null
+ 
+ * psnrcore:
+     Added -help option and formatted usage guide.
+ 
+ * vidpsnr:
+     Added -help option and formatted usage guide.
+
+2005-10-02 Joe Friedrichsen <pengi.films@gmail.com>
+ * profile:
+     Added command line interpretation for every option. Basic input
+          checks are also carried out.
+     Added the capability to use configuration files
+          * Without a config file explicitly specified on the command
+          line, the default (if it exists) will be read. Any command
+          line options given will override the default config files
+          options.
+          * With an explicitly specified config file, only the command
+          line options following the config file will override the
+          options given in the file.
+
+2005-09-23  Joe Friedrichsen  <pengi.films@gmail.com>
+
+ * profile: 
+     Added Peak Signal to Noise Ratio calculation.
+     Added data processing (time mutliplier, bitrate, and normalized
+          data are calculated).
+     Streamlined code for testing parameters that take decimal values
+          (eg -N test)
+     Removed dependency on idvid for independent users.
+
+ * psnrcore: 
+     Fixed same-frame bug. Before, the script would exit with errors
+          when two frames were the same. Now, two frames can be the
+          same and appropriate action is taken (ERROR_SUM is carried
+          on for the final PSNR, while the individual frame PSNR is
+          recorded as "inf").
+     Formatted log output to comply with CSV files.
+     Optimized finding which frames to test. Before, the number of
+          frames were compared, but only the case when the 2nd
+          directory had fewer frames than the 1st was addressed. Now, 
+          the 1st directory may have fewer frames than the 2nd and the 
+          script will properly run.
+     Streamlined various variable assignments. Much less disk activity.
+ 
+ * vidpsnr: 
+     extracted the calculation engine from the frames-creation 
+          process, allowing the engine to be accessed directly from 
+          other scripts (eg profile).

@@ -1,0 +1,107 @@
+# -* sh *-
+ 
+# vidprofile suite
+# A set of scripts that profile a given input video with mpeg2enc. Multiple 
+# tests are run with different encoder flags and statistics on output file 
+# size and encoding times are taken.
+#
+# Command line options allow the output files to be kept or a specific
+# frame to be captured from the output files, or both! Also, the Peak
+# Signal to Noise Ratio may be calculated. 
+#
+# Please see the discussion on the tovid forums for further details:
+# http://www.createphpbb.com/phpbb/viewtopic.php?p=462&mforum=tovid#462
+
+# Copyright (C) 2005 Joe Friedrichsen <pengi.films@gmail.com>
+# Original script pieces by Eric Pierce.
+# Modified on 2005 September 23.
+# 
+# This program is free software; you can redistribute it and/or 
+# modify it under the terms of the GNU General Public License 
+# as published by the Free Software Foundation; either 
+# version 2 of the License, or (at your option) any later 
+# version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+ 
+# ******************************************************************************
+# ******************************************************************************
+#
+#
+# CONSTANTS
+#
+#
+# ******************************************************************************
+# ******************************************************************************
+ 
+VIDPROFILE_VERSION="@VERSION@"
+BUILD_OPTS="core @HAVE_PNMPSNR@"
+
+VIDPROFILE_HOME="$HOME/.vidprofile"
+
+
+
+
+# ******************************************************************************
+# ******************************************************************************
+#
+#
+# FUNCTIONS
+#
+#
+# ******************************************************************************
+# ******************************************************************************
+
+# ******************************************************************************
+# Print error message, then exit.
+# Args: $@ == text string containing error message 
+# ******************************************************************************
+exit_with_error()
+{
+  echo
+  precho "$@"
+  precho "Exiting..."
+  echo
+  exit 1
+}
+
+# ******************************************************************************
+# Print a pretty (wrapped) notice message.
+# Args: $@ == text string containing the message 
+# ******************************************************************************
+precho()
+{
+  echo -e "$@" | fold -s -w ${COLUMNS:-80}
+}
+
+# ******************************************************************************
+# Determine if a vidprofile has support for a dependency, exit on failure
+# Args: $1 = dependency to check (listed in $BUILD_OPTS)
+#       $2 = command line flag that requires the dependency
+# ******************************************************************************
+check_optional_dependency()
+{
+  if echo "$BUILD_OPTS" | grep "no-$1" >> /dev/null 2>&1; then
+     exit_with_error "Not suported! \"$2\" requires \"$1\". Install $1 and recompile."
+  fi
+}
+
+# ******************************************************************************
+# Create the home directory for vidprofile
+# Args:
+# ******************************************************************************
+make_home()
+{
+  if test -d "$VIDPROFILE_HOME"; then :
+  else
+    mkdir "$VIDPROFILE_HOME"
+  fi
+}

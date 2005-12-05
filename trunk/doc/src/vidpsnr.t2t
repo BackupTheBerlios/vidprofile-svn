@@ -1,0 +1,95 @@
+vidpsnr
+
+
+%!includeconf: incl-vidprofilerc.t2t
+%!include(html): incl-header.t2t
+%!include(xhtml): incl-header.t2t
+
+== NAME ==
+
+vidpsnr -- Find the Peak-Signal-to-Noise Ratio between two videos.
+
+== SYNOPSIS ==
+
+**vidpsnr** [ //OPTIONS// ] **-o** ///path/to/original/video.avi//
+                    **-c** ///path/to/comparison/video.avi//
+                    **-l** ///path/to/psnr/log.csv//
+
+== DESCRIPTION ==
+
+vidpsnr, a frontend to psnrcore, calculates the Peak-Signal-to-Noise Ratio between two video files. The first video file is generally the original video, and the second is a modified version of the original. Often, the second video is encoded in a different codec (or the same codec, but with different options), or uses filters to improve or change the video. The aim of this script is to give concrete numbers to often subjective video quality comparisons.
+
+vidpsnr takes the two input videos and generates separate directories of frames using mplayer. The number of frames generated is controllable, as well as the individual mplayer options used to create the frames (to accommodate filter testing and more). After the frames have been made, vidpsnr calls psnrcore, which sequentially compares frames from both videos, calculating the PSNR for each frame, and finally averages the overall PSNR for both videos. Frame-by-frame data are written to a text file, while the final PSNR is returned to standard out.
+
+== FEATURES ==
+
+- Calculates the PSNR between entire videos (or the first N frames).
+- Calculates the PSNR for each frame and saves the data in a comma separated values (.csv) file.
+- Passes individual mplayer options for both videos, allowing for filter testing.
+
+
+== OPTIONS ==
+
+=== Required Options ===
+
+: **-o**, **-original** ///path/to/original/video.avi//
+  Specify the path to the original video file.
+
+: **-c**, **-compare** ///path/to/comparison/video.avi//
+  Specify the path to the comparison video file.  Note: the same video may be used to test filters by using the ***opts** parameters (see EXAMPLES).
+
+: **-l**, **-log** ///path/to/psnr/log.csv//
+  Specify the path to the data log for the frame-by-frame PSNR data. If the log doesn't exist, it will be created.
+
+  Recorded data: frame number, Y (or luminance) PSNR (dB), Cb (or blue chroma) PSNR (dB), Cr (or red chroma) PSNR (dB), whole frame PSNR (dB), frame PSNR error, cumulative error sum.
+  
+  In cases where the images do not differ, the PSNR cannot be found (because the denominator is zero). Since the images are exactly the same, there is no 'noise', and the PSNR is infinite instead.
+
+
+=== Other Options ===
+
+: **-f**, **-frame** //FRAME//
+  By default, vidpsnr will find the PSNR between both entire videos. Give this option to limit PSNR calculation to the first //FRAME// frames.
+ 
+: **-oo**, **-origopts** **"**//MPLAYER OPTIONS//**"**
+  Specify additional options to be passed to mplayer when making frames for the original video. **"Surround in double quotes."**
+ 
+: **-co**, **-compopts** **"**//MPLAYER OPTIONS//**"**
+  Specify additional options to be passed to mplayer when making frames for the comparison video. **"Use double quotes!"**
+
+: **-h**, **-help**
+  Display a usage guide and exit.
+
+: **-v**,  **-version**
+  Print the version number and exit.
+
+
+== EXAMPLES ==
+
+: ``vidpsnr -o ./original.avi -c ./comparison.avi -l $HOME/psnr-log.csv``
+  Find the PSNR between both entire videos, and store the frame-by-frame data in $HOME/psnr-log.csv
+
+: ``vidpsnr -f 60 -o ./original.avi -c ./comparison.avi -l $HOME/psnr-log.csv``
+  Find the PSNR between the first 60 frames of both videos, and store the frame-by-frame data in $HOME/psnr-log.csv
+
+: ``vidpsnr -co "-vf pp=hb" -o ./foo.avi -c ./foo.avi -l psnr-log.csv``
+  Evaluate the quality of mplayer's horizontal deblocking filter, and store the frame-by-frame data in psnr-log.csv (in the present working directory)
+
+
+== SEE ALSO ==
+
+**psnrcore**(1), **profile**(1)
+
+== BUGS ==
+
+NONE (known)
+
+== AUTHOR ==
+
+Streamlined and made robust by Joe Friedrichsen. Original idea and rough-cut by Matthias Wieser.
+
+== CONTACT ==
+Send bugs to vidprofile-users@lists.berlios.de. Please see the vidprofile homepage (http://vidprofile.berlios.de) for further information.
+
+%!include(html): incl-footer.t2t
+%!include(xhtml): incl-footer.t2t

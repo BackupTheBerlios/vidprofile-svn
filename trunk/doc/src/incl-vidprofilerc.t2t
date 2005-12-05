@@ -1,0 +1,13 @@
+
+% global settings
+%!preproc: "PACKAGE" "vidprofile-0.80"
+
+% (x)html settings
+%!options(xhtml): --toc --css-sugar --encoding utf-8
+%!style(xhtml): vidprofile_main.css
+
+%!options(html): --toc --css-sugar --encoding utf-8
+%!style(html): vidprofile_main.css
+
+% man page settings
+%!options(man): --no-toc --encoding iso-8859-1

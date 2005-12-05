@@ -1,0 +1,295 @@
+# -* sh *-
+. lib-vidprofile
+
+# Peak Signal to Noise Ratio script for comparing the PSNR between two video
+# files
+
+# This script calculates the PSNR between two video files. The first video file
+# is generally the original video, and the second is a modified version of the
+# original. Often, the second video is encoded in a different codec, or uses
+# filters to improve or change the video. The aim of this script is to give
+# concrete numbers to often subjective video quality comparisons.
+#
+# The script calls psnrcore, which sequentially compares frames from both
+# videos, calculating the PSNR for each frame, and finally averages the overall
+# PSNR for both videos. Frame-by-frame data are written to a text file, while
+# the final PSNR is returned to standard out.
+
+# INPUT:  (1) a pointer to the original video file.
+#         (2) a pointer to the modified video file (to be compared against the 
+#             original video file)
+#         (3) a pointer to a file to which the PSNR for each frame will be
+#              written.
+#         (4) the number of frames to compare, starting from the first frame.
+#         (5) options to pass to MPlayer when creating frames from the original
+#             video. Useful to add filters.
+#         (6) options to pass to MPlayer when creating frames from the
+#             comparison
+#             video. Ueeful to add filters.
+#
+# OUTPUT: (1) the overall, averaged PSNR between the two input directories.
+#         (2) a log file of the PSNR for every frame (as given by the input
+#             pointer).
+
+# Copyright (C) 2005 Joe Friedrichsen <pengi.films@gmail.com>
+# Original shell script by Matthias Wieser, available in MPlayer CVS.
+# Modified on 2005 September 23.
+# 
+# This program is free software; you can redistribute it and/or 
+# modify it under the terms of the GNU General Public License 
+# as published by the Free Software Foundation; either 
+# version 2 of the License, or (at your option) any later 
+# version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
+# ******************************************************************************
+# ******************************************************************************
+#
+#
+# CONSTANTS
+#
+#
+# ******************************************************************************
+# ******************************************************************************
+
+ORIG_DIR=./orig
+COMP_DIR=./comp
+
+MPLAYER_OPTS="-benchmark -nosound -noframedrop -noautosub"
+
+USAGE=`cat << EOF
+
+vidpsnr $VIDPROFILE_VERSION (build options: $BUILD_OPTS)
+
+Usage: vidpsnr [OPTIONS] -o /path/to/original/video.avi \\\\
+                         -c /path/to/comparison/video.avi \\\\
+                         -l /path/to/psnr/log.csv
+
+  -o, -original /path/to/original/video.avi   base video
+  -c, -compare /path/to/comparison/video.avi  comparison video
+  -l, -log /path/to/psnr/log.csv              where to put the PSNR log
+  -f, -frame FRAME                            find PSNR for FRAME frames
+  -oo, -orig_opts "MPLAYER OPTIONS"           use extra options for original
+  -co, -comp_opts "MPLAYER OPTIONS"           use extra options for comparison
+  -h, -help                                   display help and exit
+  -v, -version                                print version and exit
+   
+See also
+  man vidpsnr
+  
+EOF`
+
+
+
+
+# ******************************************************************************
+# ******************************************************************************
+#
+#
+# DEFAULTS
+#
+#
+# ******************************************************************************
+# ******************************************************************************
+ORIGINAL=""
+COMPARE=""
+PSNR_LOG=""
+LAST_FRAME=""
+MPLAY_FRAMES=""
+ORIG_OPTS=""
+COMP_OPTS=""
+
+
+
+
+# ******************************************************************************
+# ******************************************************************************
+#
+#
+# FUNCTIONS
+#
+#
+# ******************************************************************************
+# ******************************************************************************
+
+# ******************************************************************************
+# Read all command-line arguments
+# 
+# ******************************************************************************
+get_args()
+{
+    # Parse all arguments
+    while test $# -gt 0; do
+        case "$1" in
+            "-v" | "-version" )
+                precho "vidpsnr $VIDPROFILE_VERSION (build options: $BUILD_OPTS)"
+                exit 0
+                ;;
+        
+            # Data log file
+            "-l" | "-log" )
+                shift
+                PSNR_LOG="$1"
+                ;;
+            
+            # Original video
+            "-o" | "-original" )
+                shift
+                ORIGINAL="$1"
+                ;;
+                
+            # Video to compare against original
+            "-c" | "-compare" )
+                shift
+                COMPARE="$1"
+                ;;
+                
+            # Last frame to compare
+            "-f" | "-frame" )
+                shift
+                LAST_FRAME="$1"
+                MPLAY_FRAMES="-frames $LAST_FRAME"
+                ;;
+            
+            # mplayer options for the original file
+            "-oo" | "-origopts" )
+                shift
+                ORIG_OPTS="$1"
+                ;;
+                
+            # mplayer options for the comparison file
+            "-co" | "-compopts" )
+                shift
+                COMP_OPTS="$1"
+                ;;
+                
+            # Display help
+            "-h" | "-help" )
+                precho -e "$USAGE"
+                exit 0
+                ;;
+                
+            # Null option; ignored.
+            "-" )
+                ;;
+
+            # If the option wasn't recognized, exit with an error
+            * )
+                exit_with_error "Error: Unrecognized command-line option $1. (try -help)"
+                ;;
+            esac
+
+        # Get next argument
+        shift
+    done
+}
+
+# ******************************************************************************
+# Remove the frames and their directories.
+# 
+# ******************************************************************************
+clean_up()
+{
+   rm -f $ORIG_DIR/*.ppm
+   rm -f $COMP_DIR/*.ppm
+   rmdir $ORIG_DIR
+   rmdir $COMP_DIR
+}
+
+
+
+
+# ******************************************************************************
+# ******************************************************************************
+#
+#
+# BASIC SET-UP
+#
+#
+# ******************************************************************************
+# ******************************************************************************
+
+get_args "$@"
+
+# Sanity checks
+
+# Check for pnmpsnr
+check_optional_dependency "pnmpsnr" "vidpsnr"
+
+# Check for necessary options
+if test -z "$ORIGINAL" && test -z "$COMPARE" && test -z "$PSNR_LOG"; then
+   exit_with_error "One or more required options is missing. Please specify -o, -c, and -l. (try -help)"
+fi
+
+# Do the videos exist?
+if test -f "$ORIGINAL"; then :
+else
+   exit_with_error "Could not find orignal video file: $ORIGINAL."
+fi
+
+if test -f "$COMPARE"; then :
+else
+   exit_with_error "Could not find comparison video file: $COMPARE."
+fi
+
+if test -d $ORIG_DIR; then :
+else mkdir $ORIG_DIR; fi
+
+if test -d $ORIG_DIR; then :
+else mkdir $COMP_DIR; fi
+
+rm -f $ORIG_DIR/*.ppm
+rm -f $COMP_DIR/*.ppm
+
+
+# ******************************************************************************
+# ******************************************************************************
+#
+#
+# EXTRACT FRAMES FROM VIDEOS AND EVALUATE PSNR
+#
+#
+# ******************************************************************************
+# ******************************************************************************
+
+# Create frames from the original video file
+echo
+precho "Making frames from $ORIGINAL"
+
+CMD="mplayer $MPLAYER_OPTS $ORIG_OPTS $MPLAY_FRAMES -vo pnm:outdir=$ORIG_DIR $ORIGINAL > /dev/null"
+precho $CMD
+eval $CMD
+
+# Create frames from the comparison video file
+echo
+precho "Making frames from $COMPARE"
+
+CMD="mplayer $MPLAYER_OPTS $COMP_OPTS $MPLAY_FRAMES -vo pnm:outdir=$COMP_DIR $COMPARE > /dev/null"
+precho $CMD
+eval $CMD
+
+# Calculate the PSNR for the two videos
+echo
+precho "Finding PSNR between $ORIGINAL and $COMPARE"
+
+if PSNR=`psnrcore -o $ORIG_DIR -c $COMP_DIR -l $PSNR_LOG`; then
+   clean_up
+   echo
+   precho "PSNR: $PSNR"
+   precho "Frame report: $PSNR_LOG"
+else
+   clean_up
+   precho "There is a problem with psnrcore! Could not find the PSNR:"
+   exit_with_error "$PSNR"   
+fi
+
+exit 0

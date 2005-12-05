@@ -1,0 +1,145 @@
+Using vidprofile
+
+
+%!includeconf: incl-vidprofilerc.t2t
+%!options(html): --toc-level=4
+%!options(xhtml): --toc-level=4
+%!include(html): incl-header.t2t
+%!include(xhtml): incl-header.t2t
+
+This chapter describes the basic ideas of each script in PACKAGE and gives moderately detailed explanations on how to use them. The best sources for complete details are the man pages: [profile profile.html], [vidpsnr vidpsnr.html], and [psnrcore psnrcore.html].
+
+
+== Which tool to use? ==
+
+Depends on what you want to do. The most useful tool is **profile**, but the others have their uses as well. So, what do you want to do?
+
+You want to use **profile** if you want to:
+- learn how to predict output file sizes or bitrates of videos encoded with mpeg2enc
+- compare the effects of different mpeg2enc options on output bitrate
+
+
+You want to use **vidpsnr** if you want to:
+- find the Peak-Signal-to-Noise Ratio between two videos
+- compare the PSNR between mplayer filters
+
+
+You want to use **psnrcore** if you want to:
+- add PSNR finding to your application
+
+
+== Using profile ==[profile-howto]
+
+This section gives an example of how to begin using profile right away. To learn all the ins and outs of profile (like finding the PSNR, or capturing a frame from each trial, or not using the //whole// source video), the best place is the [man page profile.html].
+
+**profile** is the main script in vidprofile, and it can fully test every option of mpeg2enc. This is the main goal of profile: **Given a file size limit, what are the best mpeg2enc options (and values) to use which give the highest possible quality?** profile goes about that by finding the inverse: determine an output file's size given a set mpeg2enc options. profile runs specified tests on one source video and measures the encoded video's output bitrate and the time it took to encode. In addition, it also normalizes this data to a 'control' test (an encoding without options). Optionally, profile will measure the PSNR between the source video and each encoded video (using psnrcore, of course).
+
+=== Example ===
+
+==== 1. Choose mpeg2enc options ====
+
+A brief summary of interesting options is in profile's man page, but the complete description is best left to mpeg2enc's man page. 
+  
+For this example, we'll take some obvious options: -H (keep high frequencies), -b (bitrate), and -q (quantization).
+  
+==== 2. Decide how to test each option ====
+
+Do these options need numerical arguments? Do they stand alone as flags? If they take arguments, what values are valid, and which ones do you want to test?
+  
+-H is a flag and takes no arguments. Both -b and -q take integer arguments (others can take decimal arguments). -b is generally valid between 500 and 9800 (for DVD); we'll test from 500 to 9500, taking steps of 500. -q may range from 1 to 31 (1 being the least amount of quantization and thus the highest quality); we'll test from 1 to 20, taking steps of 1.
+  
+However, -q and -b, when used at the same time, are different than when used separately. -b alone forces a constant bitrate, -q alone forces a given quantization (and both methods are slightly wasteful). Given together, mpeg2enc uses variable bit rate encoding (using -b as a maximum bitrate). Don't worry: profile can do both single option tests and dual option tests (to evaluate such inter-dependence).
+  
+However, since profile can do all 3 kinds of tests, let's test -H, -b separately, -q separately, and finally -b and -q together.
+  
+==== 3. Prepare your tests ====
+
+You need to tell profile to test these options, but how? Each test has its own syntax. Single flags are given as is; single options are given with a min, max, and step; and dual options are given as two single options back-to-back. This could mean a long command line, and accidental errors... A straightforward way around this is with a config file:
+  
+```
+profile
+# Tests to run:
+-t "-H"
+-t "-b 500 9500 500"
+-t "-q 1 20 1"
+-t "-b 500 9500 500 -q 1 20 1"
+```
+
+The first line is very important: if it does not say **``profile``** on the first line, profile won't load it. Comments are given with the familiar **#**, and each line may have one (or more) command line options on it. Another way to specify all of the tests, in one fell swoop, is: ``-t "-H:-b 500 9500 500:-q 1 20 1:-b 500 9500 500 -q 1 20 1"``. Use colons (:) to separate tests, it's how profile keeps the list internally.
+  
+==== 4. Start the profile ====
+
+```
+$ cd ~
+$ profile -f test-video.avi -c profile.conf
+```
+
+Finally, to the action. The video file to test is given with **``-f``** and a path. We're using ~/test-video.avi. And since our tests are given in a config file, we need to tell profile look at that file with **``-c``**. 
+
+Beware: profile also looks for the default configuration file (in $HOME/.vidprofile/profile.conf), and if found, loads it. Any options given in our custom config file will override those in the default, but if the default has other options given in it, then those will be used as well. One final caveat: test specifications are not overridden: they are appended (so you can collect a whole string of tests from the default config file, from any number of custom config files, and finally from the command line - which is the strongest and overrides any config file and left-lying options).
+ 
+Data (output bitrate and encoding time) is saved to $HOME/.vidprofile/profile.csv as the test progresses. You may specify a different path using **``-l``**.
+  
+==== 5. Plot the data ====[graphing]
+
+[fig/qb-chart.png]
+
+Once profile finishes its work, we can plot the data to make a chart like this one. Looking at charts is easier than looking at a huge table of data, and it quickly shows us what values of mpeg2enc options are useful. This is the main goal of profile (worth saying again): **Given a file size limit, what are the best mpeg2enc options (and values) to use which give the highest possible quality?**
+
+From this test, we can see that -b is a strong limiter, and providing a lower -q doesn't really help. The ideal spot to encode is the point where each curve becomes flat, and the line connecting the ideal points for each -q appears to be linear: a trend!
+
+So how do we make that chart? Well when profile finishes, the terminal will look something like this:
+
+```
+$ profile -f test-video.avi -c profile.conf
+Using config file /home/user/.tovid/profile.conf, containing the following options:
+(none)
+
+Overriding default configuration file.
+Using config file /home/user/profile.conf, containing the following options:
+-t "-H" -t "-b 500 9500 500" -t "-q 1 20 1" -t "-b 500 9500 500 -q 1 20 1"
+
+md5sum:            d49835edfd34610d4eb615a07c12fdb1  /home/user/test-video.avi
+Video Duration:    15.01 sec
+mpeg2enc baseline: -a 2 -n n -f 8 -F 4
+
+Testing -a 2 -n n -f 8 -F 4 -o control_end.mpg
+
+All finished profiling test-video.avi with mpeg2enc.
+You have 422 new data points! (in /home/user/.tovid/profile.csv)
+I started on       Sat 19 Nov 2005 12:00:30 AM JST
+and finished on    Sat 19 Nov 2005 03:10:29 AM JST.
+```
+
+All we have is a big data file, but it's easier to look at charts. Importing the data file to an application like [OpenOffice.org http://www.openoffice.org] is simple. Start OpenOffice Calc and open the data file (~/.vidprofile/profile.csv). It will open a dialog box asking you how to interpret the file. Make sure that **Comma**, **Space**, and **Merge delimiters** are checked, and that the **Text delimiter** is a double quote: **``"``**.
+
+Move the data around as you see fit to make chart drawing easier. There are lots of possibilities: you can plot the raw data, or the normalized data, or you can overlap data series to compare relative effects...
+  
+== Using vidpsnr ==[vidpsnr-howto]
+
+vidpsnr is much simpler than profile: it only finds the Peak-Signal-to-Noise Ratio between two videos (or the same video processed with different mplayer filters).
+
+If you have an existing encoded video and its original video, you can find the PSNR between them by simply typing:
+
+```
+$ vidpsnr -o original.avi -c encoded.mpg -l psnr-log.csv
+```
+
+vidpsnr will compare the two videos frame-by-frame, average the PSNR, and return the final value. The frame-by-frame data (broken down into chroma and luma) is written to the log file for later analysis. By default, vidpsnr will use the whole video to find the PSNR; if you only want to do the first //NUMBER// frames, specify **``-f NUMBER``**.
+
+Three options are always required: **``-o``** which points to the original video, **``-c``** which points to the encoded video (to be compared against the original), and **``-l``** which points to where the data log should be written. Consult the [man page vidpsnr.html] for complete details on on these and other options.
+
+== Using psnrcore ==[psnrcore-howto]
+
+psnrcore is even simpler than vidpsnr, and it should be - it's the back end. psnrcore needs **images**, not videos, to compare. It looks for ppm files that are numbered sequentially (000001.ppm, 000002.ppm, 000003.ppm, ...) and compares them one-by-one, averaging the PSNR as it progresses. The frame-by-frame data (broken down into chroma and luma) is written to a log file for later analysis. 
+
+Given two directories full of ppm images from a video (and a filtered or modified encoding), or even from a digital camera, all you need to do is type:
+
+```
+$ psnrcore -o ./original -c ./comparison -l psnr-log.csv
+```
+
+All three options are necessary: **``-o``** points to the original frames/images, **``-c``** points to the comparison ones, and **``-l``** points to where the data log should be written. Consult the [man page psnrcore.html] for complete details on these and other options.
+
+%!include(html): incl-footer.t2t
+%!include(xhtml): incl-footer.t2t

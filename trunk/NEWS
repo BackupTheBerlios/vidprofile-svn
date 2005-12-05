@@ -1,0 +1,34 @@
+2005 November 29
+================
+Smarter building! ./configure will allow users to build
+  without optional dependencies.
+Man pages added!
+
+2005 October 25
+===============
+-help option added to
+   (1) profile
+   (2) vidpsnr
+   (3) psnrcore
+corrections in PSNR, snapshot, and test logic for profile
+
+
+2005 October 02
+===============
+new features added to profile:
+  (1) command line interpretation
+  (2) configuration files
+
+2005 September 23
+=================
+vidprofile packaged with GNU autotools
+main features in profile:
+  (1) fully test mpeg2enc via mplayer pipe
+  (2) take a png snap shot from each test
+  (3) calculate the peak signal to noise ratio for each test
+main feature in psnr-core
+  (1) calculate the peak signal to noise ratio for each
+      image in two directories
+main features in vidpsnr
+  (1) create two directories of frames for PSNR analysis
+  (2) accept mplayer options from the command line

@@ -1,0 +1,42 @@
+vidprofile homepage
+
+
+%!includeconf: incl-vidprofilerc.t2t
+%!include(html): incl-header.t2t
+%!include(xhtml): incl-header.t2t
+
+This is the official documentation (and website) for vidprofile, an open-source suite of tools for evaluating mpeg2enc from mjpegtools (and a daughter project of [tovid http://www.tovid.org]).
+
+The latest release is **PACKAGE**. **[Download it http://www.berlios.de/naninani]** from berliOS.
+
+== What is vidprofile? ==[introduction]
+
+The vidprofile package is a collection of a few components designed to fully test mpeg2enc from mjpegtools to answer the question: 
+
+			**Given a file size limit, what are the best mpeg2enc options (and values) to use which give the highest possible quality?** 
+
+Every component is written in sh, making modification and patching relatively easy. The package is released under the [GNU General Public License http://www.gnu.org/copyleft/gpl.html].
+
+Encoding any given video to MPEG-2 is a complex thing, just type **``man mpeg2enc``** at a prompt and you'll see just how deep the hole goes. mpeg2enc has an abundance of command line options, and each one tweaks the encoded output (some options tweak to larger degrees than others). vidprofile offers a set of tools to let you fully test each of the options in mpeg2enc and quantify the output. The tools in vidprofile will let you:
+
+- Find the output video bitrate for every mpeg2enc option for a given input video
+- Find the time factor when encoding (Will it be faster than real time? Slower? By how much? 2.3x?)
+- Find the Peak-Signal-to-Noise Ratio between the original video and the encoded one.
+- Capture and keep a frame from each encoding to compare with the best measurement tool - your eyes.
+
+
+== Help ==[help]
+
+- The mailing list: vidprofile-users ([subscribe https://lists.berlios.de/mailman/listinfo/vidprofile-users]) ([archives https://lists.berlios.de/pipermail/vidprofile-users])
+
+
+== News ==[news]
+
+(Newest on top)
+- 2005-12-04: project launched on [berliOS http://www.berlios.de].
+- 2005-11-15: documentation re-written with [txt2tags http://txt2tags.sf.net].
+- 2005-10-02: vidprofile-0.alpha is birthed.
+
+
+%!include(html): incl-footer.t2t
+%!include(xhtml): incl-footer.t2t

@@ -1,0 +1,16 @@
+profile analysis
+
+
+%!includeconf: incl-vidprofilerc.t2t
+%!include(html): incl-header.t2t
+%!include(xhtml): incl-header.t2t
+
+This chapter explains and outlines profiles of specific (publically available) videos. The goal is to find the best mpeg2enc options for a given file size limit.
+
+== Introduction ==
+
+Please watch this space as tests continue.
+
+
+%!include(html): incl-footer.t2t
+%!include(xhtml): incl-footer.t2t

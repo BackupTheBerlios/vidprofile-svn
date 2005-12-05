@@ -1,0 +1,128 @@
+vidprofile
+==========
+A tool set for characterizing output video quality and size 
+mpeg2enc from mjpegtools.
+
+
+Quick start install (full instructions in INSTALL)
+==================================================
+prompt$ ./configure
+prompt$ make
+prompt$ make install
+
+If you want to completely clean everything and start over (even create
+a new configure), then run
+
+prompt$ ./bootsrap
+
+
+License
+=======
+This package is realased under the GNU General Public License. Please
+see COPYING for the full text of the GNU GPL.
+
+
+Sample configuration file
+=========================
+profile
+# Config file for profile. DO NOT COMMENT IN-LINE
+#
+# Options given before -c/-config on the command line will 
+# be overridden by this config file.
+
+########
+# Logs #
+########
+
+# logfile (default: $HOME/.vidprofile/profile.csv)
+# Where should the main data be written?
+#-logfile $HOME/.vidprofile/profile.csv
+
+# errlog (default: /dev/null)
+# Where should errors be sent?
+#-errlog $HOME/.vidprofile/profile.err
+
+# enclog (default: /dev/null)
+# Where should mplayer's and mpeg2enc's output be sent?
+#-enclog /dev/null
+
+# psnrlog (default: $HOME/.vidprofile/psnr.csv)
+# Where should the frame-by-frame PSNR report be sent?
+#-psnrlog $HOME/.vidprofile/psnr.csv
+
+################
+# Tests to run #
+################
+
+# Which options of mpeg2enc should be tested?
+# See 'man mpeg2enc' for further option explanations.
+# Uncomment a test to run that test.
+
+# Flags
+#-test "-p"
+#-test "-H"
+#-test "-s"
+#-test "-c"
+
+# Single ranges
+# The syntax is:
+# [option] [min] [max] [step]
+# [step] may be a decimal as long as [max] has the same 
+#   number of decimal points.
+#     eg "-N 0 2.0 0.4" is OK, while
+#        "-N 0 2   0.4" is not.
+#-test "-R 0 2 1"
+#-test "-E -40 40 5"
+#-test "-r 8 32 8"
+#-test "-D 9 10 1"
+#-test "-N 0.0 2.0 0.4"
+
+# Double ranges
+# The syntax is:
+# [option1] [min1] [max1] [step1] [min2] [max2] [step2]
+# [step1|2] may be a decimal as long as [max1|2] has the 
+#   same number of decimal points.
+# The second option range is tested fully for each case 
+#   of the first option.
+#     eg "-b 800 9800 500 -q 1 18 1" means run 
+#     -q 1 18 1 for -b 800, then increment -b, repeat
+#-test "-b 800 9800 500 -q 1 18 1"
+#-test "-4 1 4 1 -2 1 4 1"
+#-test "-Q 0 5 1 -X 0 1000 100"
+#-test "-G 2 24 2 -g 2 24 2"
+
+#################
+# Other options #
+#################
+
+# encframes (default: the whole movie)
+# How many frames should mplayer send to mpeg2enc?
+# To encode the entire input file, comment this line, 
+#   or set the the number of frames to more than the 
+#   frames in the input file.
+# 450 frames play just longer than 15sec (NTSC) or 18sec (PAL)
+#-encframe 450
+
+# keepvids
+# Keep the videos mpeg2enc creates?
+# The script leaves the movies in the same directory from 
+#   which it was called.
+#-keepvids
+
+# snapshot
+# Take a frame from each test?
+# If so, which one? (must be less than either the number of 
+#   frames mplayer sends to mpeg2enc, above, or the amount of 
+#   frames in the entire input file) The script leaves the snap 
+#   shots in the same directory from which it was called.
+#-snapshot 50
+
+# psnr
+# Find the Peak Signal to Noise Ratio?
+# If so, how many frames should be compared? (must be less 
+#   than either the number of frames mplayer sends to mpeg2enc, 
+#   above, or the amount of frames in the entire input file)
+# Comment for every frame of the encoded videos. 
+# NOTE: each frame is about 1MB, please have sufficient space in the
+#   present working directory.
+#-psnr 60

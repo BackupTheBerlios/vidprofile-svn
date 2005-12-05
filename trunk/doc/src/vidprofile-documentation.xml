@@ -1,0 +1,557 @@
+<book lang="en" id="vidprofile-toc">
+<bookinfo>
+    <title>vidprofile documentation</title>
+
+    <abstract>
+    <para>This is the official documentation (and website) for <application>vidprofile</application>, an open-source suite of tools for evaluating mpeg2enc from mjpegtools.
+    </para>
+    </abstract>
+
+    <author>
+        <firstname>Joe</firstname>
+        <surname>Friedrichsen</surname>
+    </author>
+
+    <revhistory>
+        <revision>
+            <revnumber>1</revnumber>
+            <date>10-12-2005</date>
+        </revision>
+    </revhistory>
+</bookinfo>
+
+<!--
+======================================================
+
+vidprofile
+
+======================================================
+-->
+
+<chapter id="vidprofile">
+<title id="vidprofile.title">vidprofile</title>
+
+<para>This chapter explains what <application>vidprofile</application> is and how to get it running on your computer.</para>
+
+<sect1>
+<title>News</title>
+
+<para>(Newest on top)</para>
+
+<itemizedlist>
+    <listitem><para>2005-10-02: vidprofile-0.22 is released. <ulink url="http://sourceforge.net/projects/tovid">Get it</ulink> and <link linkend="vidprofile.Installation">install it</link>; try and see how it works!</para>
+    </listitem>
+</itemizedlist>
+
+</sect1>
+
+
+<sect1>
+<title>About vidprofile</title>
+
+<sect2>
+<title>Introduction</title>
+<para>The <application>vidprofile</application> package is a collection of a few components designed to fully test <application>mpeg2enc</application> from <application>mjpegtools</application>. Every component is written in <command>sh</command>, making modification and patching relatively easy. The package is released under the <ulink url="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</ulink>.</para>
+
+<para>Encoding any given video to MPEG-2 is a complex thing, just type <command>man mpeg2enc</command> at a prompt and you'll see just how deep the hole goes. mpeg2enc has an abundance of command line options, and each one tweaks the encoded output (some options tweak to larger degrees than others). vidprofile offers a set of tools to let you fully test each of the options in mpeg2enc and quantify the output. The tools in vidprofile will let you:</para>
+
+<itemizedlist>
+<listitem><para>Find the output video bitrate for every mpeg2enc option for a given input video</para></listitem>
+<listitem><para>Find the time factor when encoding (Will it be faster than real time? Slower? By how much? 2.3x?)</para></listitem>
+<listitem><para>Find the Peak-Signal-to-Noise Ratio between the original video and the encoded one.</para></listitem>
+<listitem><para>Capture and keep a frame from each encoding to compare with the best measurement tool - your eyes.</para></listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title>History</title>
+<para><application>vidprofile</application> started out as a group of separate scripts designed to test certain flags of <application>mpeg2enc</application>. Why test at all? Well, <application>tovid</application> primarily uses mpeg2enc to make (S)VCD and DVD compatible video files. The exact behavior of the encoder was a bit of a mystery; predicting output file sizes was especially difficult. Also, the output quality was another fuzzy area. What did all of these options do exactly? And how significant were they?</para>
+ 
+<para>Once the variety of scripts covered all the options in mpeg2enc, they were merged and streamlined into <application>profile</application>. With a simple command, <command>profile video.avi</command>, every option of mpeg2enc could be tested (usually overnight). Around this time of vidprofile's development, the CVS version of <application>mplayer</application> saw some considerable improvement (and documentation completion), which raised the question: <emphasis>What is the better encoder: mjpegtools' mpeg2enc or mplayer's libavcodec?</emphasis> The debate sill goes on, but the developers were watching the mailing lists more closely. One CVS update caught their attention: a script that measured the Peak-Signal-to-Noise Ratio (<acronym>PSNR</acronym>) between two videos.</para>
+
+<para>Matthias Wieser is the author of that script, and his tool is included with mplayer's CVS. He used <application>pnmpsnr</application> from <application>netpbm</application> to measure the PSNR between individual frames. Then, he kept added some analysis to carry the figure across groups of frames and averaged over the entire video. Using his idea with some additional enhancements, PSNR calculation was added to profile.</para>
+
+<para>Shortly after that, the developers thought that other users may want to use this script, and they began to modify profile to make it more command-line friendly. Up until this point, setting parameters for every new profile involved editing the constants in the script and running again, something not acceptable for an application. profile needed to take command line arguments and use configuration files. After those updates were finished, this documentation was written, and the package was officially released.</para>
+</sect2>
+
+</sect1>
+
+
+<sect1>
+<title>Preliminaries</title>
+
+<sect2>
+<title>Requirements</title>
+
+<para><application>vidprofile</application> has no strictly defined minimum system requirements. If you can watch video on your Linux system, you probably have enough computing power for the things vidprofile will do. As a rule of thumb, it's a good idea to have have some space on your hard disk; 2GB will be more than enough. If you're really squeezed for space, you could even get buy with 100MB (though you may not be able to do everything vidprofile is capable of).</para>
+
+<para>vidprofile is written in <command>sh</command> and tested on Linux, so a Linux-like environment is required. In addition, it also uses a few 'standard' command line tools like <command>awk</command>, <command>bc</command>, and <command>grep</command>. Most likely, these are installed by default. Porting to a BSD flavor, cygwin, or Mac OS X shouldn't be too much of a headache as long as you can satisfy the dependencies and don't mind some (minor) script modification.</para>
+
+<para>As the daughter project of <application>tovid</application>, if you have tovid running already with its <link linkend="sec:Dependencies">Dependencies</link>, then there is only one more requirement for <application>vidprofile</application>.</para>
+
+</sect2>
+
+<sect2 id="sec:profile.Dependencies">
+<title>Dependencies</title>
+
+<para><application>vidprofile</application> has only one more dependency than those required by tovid: <application>Netpbm</application>. However, if you want to run vidprofile alone, you'll need a few things.</para>
+
+<variablelist>
+<varlistentry>
+    <term><application><ulink
+url="http://netpbm.sourceforge.net/">Netpbm</ulink></application></term>
+    <listitem><para>Another suite of command-line applications, similar to <application>ImageMagick</application> for manipulating and analyzing images. <application>profile</application>, part of vidprofile, uses <application>pnmpsnr</application> to find the Peak Signal to Noise Ratio (<acronym>PSNR</acronym>) between two images. This tool is quite mature, and is available in major package repositories. You should be able to grab netpbm through your distribution's preferred package manager.</para></listitem>
+</varlistentry>
+<varlistentry>
+    <term><application><ulink url="http://www.mplayerhq.hu/">mplayer</ulink></application></term>
+    <listitem><para>profile uses mplayer for video playback, so this is a must-install.</para></listitem>
+</varlistentry>
+<varlistentry>
+    <term><application><ulink url="http://mjpeg.sourceforge.net/">mjpegtools</ulink></application></term>
+    <listitem><para>This is the object of the tests in vidprofile!</para></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="vidprofile.Installation">
+<title>Installation</title>
+
+<sect2>
+<title>Source tarball</title>
+
+<itemizedlist>
+    <listitem><para><ulink
+    url="http://prdownloads.sourceforge.net/tovid/vidprofile-&suite_version;.tar.gz?download">vidprofile_&suite_version;.tar.gz</ulink> contains the command-line scripts.</para></listitem>
+</itemizedlist>
+
+<para>Download the command-line package and save it on your computer. We'll assume it's saved in <filename>~/Downloads</filename>.</para>
+
+<para>Next, open a terminal window (such as <application>XTerm</application>, <application>RXVT</application>, or <application>Konsole</application>) and extract the tarball by typing the following commands:</para>
+
+<screen>
+<prompt>$</prompt> <userinput>cd ~/Downloads</userinput>
+<prompt>$</prompt> <userinput>tar -xzvf vidprofile-&suite_version;.tar.gz</userinput>
+</screen>
+
+<para>The installation files will go into a subdirectory <filename>vidprofile-&suite_version;</filename> within the current directory. Next, do the following:</para>
+
+<screen>
+<prompt>$</prompt> <userinput>cd ~/Downloads/vidprofile-&suite_version;</userinput>
+<prompt>$</prompt> <userinput>./configure</userinput>
+<prompt>$</prompt> <userinput>su -c "make install"</userinput>
+</screen>
+
+<para>If you decide you don't want vidprofile installed anymore, run <command>make uninstall</command> from the original installation directory (<filename>~/Downloads/vidprofile-&suite_version;</filename>).</para>
+
+</sect2>
+
+<sect2>
+<title>CVS builds</title>
+
+<para>You can get a copy of the latest development version of vidprofile through CVS. To get this version, you need to have <ulink url="http://www.cvshome.org/">CVS</ulink> installed.</para>
+
+<para>Using CVS is a little different; instead of just downloading vidprofile, you'll be "checking out" a copy of it. Using the same example directory as above:</para>
+
+<screen>
+<prompt>$</prompt> <userinput>cd ~/Downloads</userinput>
+<prompt>$</prompt> <userinput>cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/tovid login</userinput>
+<computeroutput>Logging in to :pserver:anonymous@cvs.sourceforge.net:2401/cvsroot/tovid</computeroutput>
+<prompt>CVS password:</prompt> <userinput>(Enter)</userinput>
+<prompt>$</prompt> <userinput>cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/tovid co -P test-tools</userinput>
+<prompt>$</prompt> <userinput>cd test-tools</userinput>
+<prompt>$</prompt> <userinput>aclocal</userinput>
+<prompt>$</prompt> <userinput>autoconf</userinput>
+<prompt>$</prompt> <userinput>automake</userinput>
+</screen>
+
+<para>&lastgenerated;</para>
+
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<!--
+======================================================
+
+vidprofile
+
+======================================================
+-->
+
+<chapter id="vidprofile-manual">
+<title>vidprofile man pages</title>
+
+<refentry id="profile">
+
+<refnamediv>
+<refname>profile</refname>
+<refpurpose>Analyze the options of mpeg2enc</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>profile</command>
+<arg choice="opt">
+    <replaceable>OPTIONS</replaceable>
+</arg>
+<arg choice="req">
+    <option>-f</option> <replaceable>/path/to/video.avi</replaceable>
+</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>profile evaluates the encoding options of mpeg2enc (from mjpegtools). profile takes a video and systematically encodes it with mpeg2enc to measure various effects of mpeg2enc's options on output video bitrate, encoding time, and quality, leaving the data in a comma separated values (.csv) file.</para>
+<para>Additional command line options tell profile to take a snap shot from each test trial and to find the Peak-Signal-to-Noise (PSNR) ratio between the original video file and each test trial. Further options tweak the properties of profile's behavior.</para>
+</refsect1>
+
+<refsect1>
+<title>Features</title>
+
+<itemizedlist>
+    <listitem><para>Tests any and every mpeg2enc option, recording the output bitrate and encoding time (both in absolute units and normalized to an optionless 'control' trial).</para></listitem>
+    <listitem><para>Captures an encoded frame from each trial.</para></listitem>
+    <listitem><para>Finds the Peak-Signal-to-Noise (PSNR) ratio between the source video and each encoded trial.</para></listitem>
+</itemizedlist>
+
+</refsect1>
+
+
+<refsect1>
+<title>Options</title>
+<refsect2>
+<title>Required Options</title>
+<literallayout><option>-f</option> | <option>-file</option> <replaceable>/path/to/video.avi</replaceable>
+Evaluate mpeg2enc using video.avi. Specify a full or relative path to the source video file. profile will use this video to test the mpeg2enc options you specify (see -t).
+</literallayout>
+</refsect2>
+
+<refsect2>
+<title>Logs</title>
+<literallayout><option>-l</option> | <option>-logfile</option> <replaceable>/path/to/logfile.csv</replaceable>
+Specify a different path for the data file other than the default: $HOME/.tovid/profile.csv. The data file is saved as a plain ASCII comma-separated values file (.csv) for further analysis and plotting.
+ 
+Recorded data: the tested mpeg2enc command line option(s), duration of source video (s), time to encode (s), output size (kB), time scale factor, output bitrate (kbps), normalized time (%), normalized bitrate (%), and the Peak-Signal-to-Noise Ratio (dB).
+ 
+<option>-el</option> | <option>-errlog</option> <replaceable>/path/to/error.log</replaceable>
+Specify a different path for the error log other than the default: /dev/null. All subprocess errors are written here EXCEPT for mplayer's and mpeg2enc's errors, which are written to -enclog.
+ 
+<option>-nl</option> | <option>-enclog</option> <replaceable>/path/to/encoder.log</replaceable>
+Specify a different path for the encoding log other than the default: /dev/null. This log is incredibly verbose: all of mplayer's and mpeg2enc's frame-by-frame statistics (and errors, if any) are written here.
+ 
+<option>-pl</option> | <option>-psnrlog</option> <replaceable>/path/to/psnr.csv</replaceable>
+Specify a different path for the frame-by-frame Peak-Signal-to-Noise Ratio data other than the default: $HOME/.tovid/psnr.csv. The data file is saved as a plain ASCII comma-separated values file (.csv) for further analysis and plotting.
+ 
+Recorded data: frame number, Y (or luminance) PSNR (dB), Cb (or blue chroma) PSNR (dB), Cr (or red chroma) PSNR (dB), whole frame PSNR (dB), frame PSNR error, cumulative error sum.
+ 
+In cases where the images do not differ, the PSNR cannot be found (because the denominator is zero). Since the images are exactly the same, there is no 'noise', and the PSNR is infinite instead.
+ 
+NOTE: nothing will be written to the log unless the PSNR is calculated (see -p).
+</literallayout>
+</refsect2>
+
+<refsect2>
+<title>Option Tests</title>
+<literallayout>The main purpose of profile is to test mpeg2enc's many options on a video to evaluate the encoder's behavior.
+ 
+mpeg2enc has many different options which separate into three classes. Some are flags (either on or off), others independently take one numerical argument in a valid range, and finally some are inter-dependent, where using one implies using another. The classic example of inter-dependent options in mpeg2enc is -b and -q. Using -q (a quantization) implies a variable bitrate, and thus to keep the bitrate under control, -b can be used to limit the maximum bitrate.
+ 
+profile can test EVERY option of mpeg2enc; the following (summarized) mpeg2enc options are the more interesting ones. See the mpeg2enc man page for complete details of these (and the other) options.
+ 
+There are two generalized test specifications:
+ 
+    <option>-t</option> | <option>-test</option> <replaceable>"TEST"</replaceable>
+    Multiple tests (-t) may be called for any profile (see the Examples).
+    <option>-t</option> | <option>-test</option> <replaceable>"TEST 1:TEST 2:TEST 3"</replaceable>
+    Instead of specifying each test as a separate -t option, you may specify many tests at once using a colon (:) as a separator.
+ 
+    Tests are carried out in the order specified (so no reshuffling). In addition, if tests are specified in the default (or in a -c given) configuration file, the tests given on command line DO NOT override the configuration file tests. Instead, the command line tests are appended to the end of the test list and carried out last. You may have overlapping tests if you're not careful!
+ 
+    Each encoder option class has its own syntax as described below:
+</literallayout>
+         
+<refsect3>
+<title>Suggested flags</title>
+<literallayout><replaceable>"-FLAG"</replaceable>
+A FLAG is called using the same letter as those for mpeg2enc:
+     c    Generate closed GOPs.
+     H    Keep the high-frequency information.
+     p    Tell the _decoder_ to use 3-2 pulldown.
+     s    Generate sequence headers for ff/rew/seek.
+</literallayout>
+</refsect3>
+
+<refsect3>
+<title>Suggested independent numerical options</title>
+<literallayout><replaceable>"-OPTION MIN MAX STEP"</replaceable>
+An independent numerical option needs four pieces of information to completely specify an option test: the option to test (OPTION), the value at which to start testing (MIN), the value at which to finish testing (MAX), and the numerical increment between tests (STEP). NOTE: if an option can take a decimal argument, both MAX and STEP must have the same number of decimal points.
+ 
+Each OPTION is called using the same letter as those for mpeg2enc:
+     D    9..10
+     DC component precision.
+ 
+     E    -40..40
+     The 'unit coefficient elimination' threshold.
+ 
+     N    0.0..2.0
+     Reduce high-frequency content. 0.0 means don't reduce.
+ 
+     r    8|16|24|32
+     Motion search radius.
+ 
+     R    0..2
+     Number of B-frames between I- or P-frames.
+</literallayout>              
+</refsect3>
+
+<refsect3>
+<title>Suggested inter-dependent numerical options</title>
+<literallayout><replaceable>"-OPTION1 MIN1 MAX1 STEP1 -OPTION2 MIN2 MAX2 STEP2"</replaceable>
+Inter-dependent numerical options are similar to independent numerical options, but using one inter-dependent option implies the use of another option (or creates the need to use another option). Specifying inter-dependent options is just giving two options with ranges. Eight pieces of information are needed: the first option to test (OPTION1), that option's value at which to start testing (MIN1), that option's value at which to finish testing (MAX1), and that option's numerical increment between tests (STEP1); next, the second option to test (OPTION2), that option's value at which to start testing (MIN2), that option's value at which to finish testing (MAX2), and that option's numerical increment between tests (STEP2). NOTE: if an option can take a decimal argument, both MAX and STEP must have the same number of decimal points.
+ 
+profile makes no strictly defined distinction between an independent option and an inter-dependent option. In fact, profile uses the length of the test string to determine which test to run. Consequently, there's no reason you cannot specify 'independent' options as 'inter-dependent' options. For example, -t "-E -40 40 5 -Q 0.0 5.0 1.0", which will evaluate the inter-dependence of -E and -Q, is a perfectly valid test specification.
+ 
+Each OPTION is called using the same number/letter as those for mpeg2enc:
+     2    1..4
+     4    1..4
+     Motion estimation aggressiveness. -4 controls 4*4 pixel areas, and -2 controls 2*2 pixel areas.
+ 
+     b    100..15000
+     The video bitrate. When -q is present, variable bitrate encoding is enabled, and -b becomes the maximum bitrate.
+     q    1..31
+     Amount of quantization. A lower number implies less quantization and thus higher quality.
+ 
+     g    1..24
+     G    1..24
+     Limits for the size of GOPs (Group of Pictures). -g is the lower limit; -G is the upper limit.
+ 
+     Q    0.0..5.0
+     Reduce the quantization for highly detailed blocks as needed. 0.0 means always use the quantization for the entire frame.
+     X    0.0..2500.0
+     Luma (brightness) variance below which to use -Q.
+</literallayout>              
+</refsect3>
+</refsect2>
+
+<refsect2>
+<title>Other Options</title>
+<literallayout><option>-c</option> | <option>-config</option> <replaceable>/path/to/config.file</replaceable>
+Specify a path to a config file; profile looks for a default configuration file in $HOME/.tovid/profile.conf and reads it before starting. See the README for an example configuration file. When using a configuration file, all command line options placed _after_ the configuration file will override the options in the configuration file (except for -test, in which case all tests are included and none are overridden). If the default configuration file exists and another file is specified with -c, the specified file takes precedence over the default file. The order of importance, from least to most important, is: default configuration file, specified configuration file, right-most command line options.
+ 
+<option>-k</option> | <option>-keepvids</option>
+Keep encoded videos. After each option trial is finished, profile deletes the encoded video by default. Use this option if you want to keep every trial encoding. Videos are left in the present working directory, so this could take up a lot of space!
+ 
+<option>-nf</option> | <option>-encframe</option> <replaceable>NUMBER</replaceable>
+Encode NUMBER frames. profile encodes the _entire_ source video for every trial by default. If you don't want to encode the whole file, you may specify an integer number of frames (NUMBER) to encode with this option. As a rule of thumb, 1 second of NTSC video is 30 frames and one second of PAL video is 25 frames.
+ 
+<option>-p</option> | <option>-psnr</option> <replaceable>NUMBER|all</replaceable>
+Find the Peak-Signal-to-Noise Ratio for NUMBER frames. profile does not find the Peak-Signal-to-Noise Ratio by default. If you want to find the PSNR between the source video and each encoding trial, use this option. NUMBER is the number of frames to average for the PSNR (use "all" to compare the entire videos). If -nf is given, the number of PSNR frames must be less than or equal to the number of encoded frames.
+ 
+<option>-s</option> | <option>-snapshot</option> <replaceable>NUMBER</replaceable>
+Take a snapshot of frame NUMBER. profile can take one frame from the source video and each encoding trial. Use this option to enable this feature and specify which frame to capture. Like -p, if -nf is specified, the snapshot frame number must be less than or equal to the number of encoded frames. Snapshots are left in the present working directory.
+ 
+<option>-h</option> | <option>-help</option>
+Display this usage guide.
+ 
+<option>-v</option> | <option>-version</option>
+Print the version number and exit.
+</literallayout>
+</refsect2>
+</refsect1>
+
+<refsect1>
+<title>Examples</title>
+<literallayout><option>profile -t "-H" -t "-4 1 4 1 -2 1 4 1" -nf 450 -f /home/foo/bar.avi</option>
+Test the flag -H, and the options -4 and -2 using the first 450 frames from /home/foo/bar.avi. First, -H will be tested. Next, -2 will be tested for 1, 2, 3, and 4 while -4 is at 1; then, -4 will be set to 2 and -2 will be tested from 1 to 4 again; and so on until -4 reaches 4. Provided the default config file isn't present, or sets the other options, logs are sent to the default locations, snapshots are not taken, encoded videos are not kept, and the PSNR is not calculated.
+ 
+<option>profile -c $HOME/.tovid/custom.conf -l $HOME/profile-data.csv</option>
+Test all the flags present in $HOME/.tovid/custom.conf, and use other settings specified (like snapshots or PSNR) in that file. Specifying -l after -c ensures the data log will be written to $HOME/profile-data.csv (even if -c lists a custom data log location - options to the right of -c override any options in the config file).
+</literallayout>
+</refsect1>
+
+<refsect1>
+<title>Contact</title>
+<literallayout>Please see the <ulink url="http://tovid.org/">tovid homepage</ulink> for further assistance (contact information, phpbb forum, and IRC links).
+</literallayout>
+</refsect1>
+
+</refentry>
+
+
+<refentry id="vidpsnr">
+
+<refnamediv>
+<refname>vidpsnr</refname>
+<refpurpose>Find the Peak-Signal-to-Noise Ratio between two videos.</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>vidpsnr</command>
+<arg choice="opt">
+    <replaceable>OPTIONS</replaceable>
+</arg>
+<arg choice="req">
+    <option>-o</option> <replaceable>/path/to/original/video.avi</replaceable>
+    <option>-c</option> <replaceable>/path/to/comparison/video.avi</replaceable>
+    <option>-l</option> <replaceable>/path/to/psnr/log.csv</replaceable>
+</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>vidpsnr, a frontend to psnrcore, calculates the Peak-Signal-to-Noise Ratio between two video files. The first video file is generally the original video, and the second is a modified version of the original. Often, the second video is encoded in a different codec (or the same codec, but with different options), or uses filters to improve or change the video. The aim of this script is to give concrete numbers to often subjective video quality comparisons.</para>
+
+<para>vidpsnr takes the two input videos and generates separate directories of frames using mplayer. The number of frames generated is controllable, as well as the individual mplayer options used to create the frames (to accommodate filter testing and more). After the frames have been made, vidpsnr calls psnrcore, which sequentially compares frames from both videos, calculating the PSNR for each frame, and finally averages the overall PSNR for both videos. Frame-by-frame data are written to a text file, while the final PSNR is returned to standard out.</para>
+</refsect1>
+
+<refsect1>
+<title>Features</title>
+<itemizedlist>
+    <listitem><para>Calculates the PSNR between entire videos (or the first N frames).</para>
+    </listitem>
+    <listitem><para>Calculates the PSNR for each frame and saves the data in a comma separated values (.csv) file.</para>
+    </listitem>
+    <listitem><para>Passes individual mplayer options for both videos, allowing for filter testing.</para>
+    </listitem>
+</itemizedlist>
+</refsect1>
+
+<refsect1>
+<title>Options</title>
+<refsect2>
+<title>Required Options</title>
+<literallayout><option>-o</option> | <option>-original</option> <replaceable>/path/to/original/video.avi</replaceable>
+Specify the path to the original video file.
+ 
+<option>-c</option> | <option>-compare</option> <replaceable>/path/to/comparison/video.avi</replaceable>
+Specify the path to the comparison video file.  Note: the same video may be used to test filters by using the *_opts parameters (see Examples).
+ 
+<option>-l</option> | <option>-log</option> <replaceable>/path/to/psnr/log.csv</replaceable>
+Specify the path to the data log for the frame-by-frame PSNR data. If the log doesn't exist, it will be created.
+ 
+Recorded data: frame number, Y (or luminance) PSNR (dB), Cb (or blue chroma) PSNR (dB), Cr (or red chroma) PSNR (dB), whole frame PSNR (dB), frame PSNR error, cumulative error sum.</literallayout>
+</refsect2>
+<refsect2>
+<title>Other Options</title>
+<literallayout><option>-f</option> | <option>-frame</option> <replaceable>FRAME</replaceable>
+By default, vidpsnr will find the PSNR between both entire videos. Give this option to limit PSNR calculation to the first FRAME frames.
+ 
+<option>-oo</option> | <option>-origopts</option> <replaceable>"MPLAYER OPTIONS"</replaceable>
+Specify additional options to be passed to mplayer when making frames for the original video. "Surround in double quotes."
+ 
+<option>-oc</option> | <option>-compopts</option> <replaceable>"MPLAYER OPTIONS"</replaceable>
+Specify additional options to be passed to mplayer when making frames for the comparison video. "Use double quotes!"
+ 
+<option>-h</option> | <option>-help</option>
+Display this usage guide.
+ 
+<option>-v</option> | <option>-version</option>
+Print the version number and exit.</literallayout>
+</refsect2>
+</refsect1>
+
+<refsect1>
+<title>Examples</title>
+<literallayout><option>vidpsnr -o ./original.avi -c ./comparison.avi -l $HOME/psnr-log.csv</option>
+Find the PSNR between both entire videos, and store the frame-by-frame data in $HOME/psnr-log.csv</literallayout>
+ 
+<literallayout><option>vidpsnr -f 60 -o ./original.avi -c ./comparison.avi -l $HOME/psnr-log.csv</option>
+Find the PSNR between the first 60 frames of both videos, and store the frame-by-frame data in $HOME/psnr-log.csv</literallayout>
+ 
+<literallayout><option>vidpsnr -co "-vf pp=hb" -o ./original.avi -c ./original.avi -l $HOME/psnr-log.csv</option>
+Evaluate the quality of mplayer's horizontal deblocking filter, and store the frame-by-frame data in $HOME/psnr-log.csv</literallayout>
+</refsect1>
+
+<refsect1>
+<title>Contact</title>
+<literallayout>Please see the <ulink url="http://tovid.org/">tovid homepage</ulink> for further assistance (contact information, phpbb forum, and IRC links).
+</literallayout>
+</refsect1>
+</refentry>
+
+
+<refentry id="psnrcore">
+
+<refnamediv>
+<refname>psnrcore</refname>
+<refpurpose>Calculate the Peak-Signal-to-Noise Ratio between the frames of two videos.</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>psnrcore</command>
+<arg choice="opt">
+    <replaceable>OPTIONS</replaceable>
+</arg>
+<arg choice="req">
+    <option>-o</option> <replaceable>/path/to/original/video/frames/</replaceable>
+    <option>-c</option> <replaceable>/path/to/comparison/video/frames</replaceable>
+    <option>-l</option> <replaceable>/path/to/psnr/log.csv</replaceable>
+</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>psnrcore is a backend that calculates the PSNR between the frames from two video files. The frames must be in ppm format and numbered sequentially (000001.ppm, 000002.ppm, etc; mplayer can do this with the "-vo pnm" option). The first video file is generally the original video, and the second is a modified version of the original. Often, the second video is encoded in a different codec (or the same codec, but with different options), or uses filters to improve or change the video. The aim of this script is to give concrete numbers to often subjective video quality comparisons.</para>
+
+<para>psnrcore sequentially compares frames from both videos, calculating the PSNR for each frame, and finally averages the overall PSNR for both videos. Frame-by-frame data are written to a comma separated values (.csv) file, while the final PSNR is returned to standard out.</para>
+</refsect1>
+
+<refsect1>
+<title>Features</title>
+<itemizedlist>
+    <listitem><para>Calculates the PSNR for each frame and saves the data in a comma separated values (.csv) file.</para></listitem>
+    <listitem><para>Returns the average PSNR to standard out.</para></listitem>
+</itemizedlist>
+</refsect1>
+
+<refsect1>
+<title>Options</title>
+<refsect2>
+<title>Required Options</title>
+<literallayout><option>-o</option> | <option>-original</option> <replaceable>/path/to/original/video/frames/</replaceable>
+Specify the path to the directory of frames from the original video file. The frames must be in ppm format and numbered sequentially (000001.ppm, 000002.ppm, etc).
+ 
+<option>-c</option> | <option>-compare</option> <replaceable>/path/to/comparison/video/frames</replaceable>
+Specify the path to the directory of frames from the comparison video file. The frames must be in ppm format and numbered sequentially (000001.ppm, 000002.ppm, etc).
+ 
+<option>-l</option> | <option>-log</option> <replaceable>/path/to/psnr/log.csv</replaceable>
+Specify the path (including the name) to a file to which the PSNR for each frame will be written. If the log doesn't exist, it will be created.
+ 
+Recorded data: frame number, Y (or luminance) PSNR (dB), Cb (or blue chroma) PSNR (dB), Cr (or red chroma) PSNR (dB), whole frame PSNR (dB), frame PSNR error, cumulative error sum.</literallayout>
+</refsect2>
+<refsect2>
+<title>Other Options</title>
+<literallayout><option>-h</option> | <option>-help</option>
+Display this usage guide.
+ 
+<option>-v</option> | <option>-version</option>
+Print the version number and exit.</literallayout>
+</refsect2>
+</refsect1>
+
+<refsect1>
+<title>Examples</title>
+<literallayout><option>psnrcore -o ./original-frames -c ./comparison-frames -l $HOME/psnr-log.csv</option>
+Use the frames in ./original-frames as the basis for the PSNR between those frames and ./comparison-frames. Store the frame-by-frame data in $HOME/psnr-log.csv</literallayout>
+</refsect1>
+
+<refsect1>
+<title>Contact</title>
+<literallayout>Please see the <ulink url="http://tovid.org/">tovid homepage</ulink> for further assistance (contact information, phpbb forum, and IRC links).
+</literallayout>
+</refsect1>
+</refentry>
+
+
+</chapter>
+
+</book>
+</set>

@@ -1,0 +1,106 @@
+Set up
+
+
+%!includeconf: incl-vidprofilerc.t2t
+%!include(html): incl-header.t2t
+%!include(xhtml): incl-header.t2t
+
+This chapter explains what is needed to run the vidprofile suite and how to install it on your system.
+
+The latest release is **PACKAGE**. **[Download it http://www.berlios.de/naninani]** from berliOS.
+
+== Preliminaries ==
+
+=== Requirements ===[requirements]
+
+vidprofile has no strictly defined minimum system requirements. If you can watch video on your Linux system, you should have enough computing power to fully use vidprofile. As a rule of thumb, it's a good idea to have some space on your hard disk: 2GB will be more than enough, but you could get by with 100MB (though you probably won't be able to fully use vidprofile).
+
+vidprofile is written in sh and tested on Linux, so a Linux-like environment is required. In addition, it also uses a few 'standard' command line tools like awk, bc, and grep. Most likely, these are installed by default. Porting to a BSD flavor, cygwin, or Mac OS X shouldn't be too much of a headache as long as you can satisfy the dependencies and don't mind some (minor) script modification.
+
+As the daughter project of tovid, if you have tovid running already with its dependencies, then there is only one more (optional) requirement for vidprofile: Netpbm.
+
+=== Dependencies ===[dependencies]
+
+vidprofile has only one more (optional) dependency than those required by tovid: Netpbm. However, if you want to run vidprofile alone, you'll need a few things.
+
+: [Netpbm http://netpbm.sourceforge.net/] //(optional)//
+  Another suite of command-line applications, similar to ImageMagick for manipulating and analyzing images. profile, part of vidprofile, uses pnmpsnr to find the Peak Signal to Noise Ratio (PSNR) between two images. This tool is quite mature, and is available in major package repositories. You should be able to grab netpbm through your distribution's preferred package manager.
+  
+  Without netpbm (and its pnmpsnr), you cannot use psnrcore or vidpsnr. In addition, profile will be limited - it will not be able to calculate the PSNR. No other features are affected.
+
+: [mplayer http://www.mplayerhq.hu/] **(required)**
+  profile uses mplayer for video playback and frame extraction, so this is a must-install.
+
+: [mjpegtools http://mjpeg.sourceforge.net/] **(required)**
+  This is the object of the tests in vidprofile!
+
+  
+== Installation ==
+
+=== Source tarball ===[source]
+- [PACKAGE.tar.gz http://prdownloads.sourceforge.net/tovid/PACKAGE.tar.gz?download] contains the command-line scripts.
+
+
+Download the command-line package and save it on your computer. We'll assume it's saved in ~/Downloads.
+
+Next, open a terminal window (such as XTerm, RXVT, or Konsole) and extract the tarball by typing the following commands:
+
+```
+$ cd ~/Downloads
+$ tar -xzvf PACKAGE.tar.gz
+```
+
+The installation files will go into a subdirectory called PACKAGE within the current directory. Next, do the following:
+
+```
+$ cd ~/Downloads/PACKAGE
+$ ./configure
+$ su -c "make install"
+```
+
+./configure will search your system for the dependencies vidprofile has and summarize what it found at the end. Be sure to look carefully that everything is there. An example successful ./configure summary is:
+
+```
+FINAL SUMMARY
+
+  Required dependencies
+    grep:               /bin/grep
+    mplayer:            /usr/local/bin/mplayer
+    mpeg2enc:           /usr/bin/mpeg2enc
+    bc:                 /usr/bin/bc
+
+  Optional dependencies
+    pnmpsnr:            pnmpsnr
+
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating src/Makefile
+config.status: creating doc/Makefile
+config.status: creating src/lib-vidprofile.sh
+```
+
+=== SVN builds ===[cvs]
+
+You can get a copy of the latest development version of vidprofile through Subversion (svn). To get this version, you need to have [SVN http://subversion.tigris.org/] installed.
+
+Using SVN is a little different; instead of just downloading vidprofile, you'll be "checking out" a copy of it. Using the same example directory as above:
+
+``` 
+$ cd ~/Downloads
+$ cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/tovid login
+Logging in to :pserver:anonymous@cvs.sourceforge.net:2401/cvsroot/tovid
+CVS password:   (Enter)
+$ cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/tovid co -P test-tools
+$ cd test-tools
+$ ./bootstrap
+$ ./configure
+$ make
+$ su -c "make install" 
+```
+
+=== Uninstalling ===
+
+If you decide you don't want vidprofile installed anymore, run **``sudo make uninstall``** from the original installation directory (~/Downloads/PACKAGE or vidprofile's svn directory).
+
+%!include(html): incl-footer.t2t
+%!include(xhtml): incl-footer.t2t

@@ -1,0 +1,32 @@
+#! /usr/bin/env sh
+
+# Generate documentation for the vidprofile suite from txt2tags
+# input files. See http://txt2tags.sourceforge.net/ for
+# documentation on the input format.
+
+# Generate (X)HTML
+TOHTML_OPTS="-t xhtml"
+TOHTML_FILES=`find ./src -name "*.t2t" -and -not -name "incl-*.t2t" | sort`
+
+rm -vf *.html
+rm -vf *.man
+
+for FILE in $TOHTML_FILES
+do
+    INFILE="--infile=$FILE"
+    OUTFILE="--outfile=`basename $FILE .t2t`.html"
+    txt2tags $TOHTML_OPTS $INFILE $OUTFILE
+done
+
+# Generate manpages
+TOMAN_OPTS="-t man"
+TOMAN_FILES="src/profile.t2t \
+             src/vidpsnr.t2t \
+             src/psnrcore.t2t"
+
+for FILE in $TOMAN_FILES
+do
+    INFILE="--infile=$FILE"
+    OUTFILE="--outfile=`basename $FILE .t2t`.man"
+    txt2tags $TOMAN_OPTS $INFILE $OUTFILE
+done

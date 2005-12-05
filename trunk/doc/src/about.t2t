@@ -1,0 +1,38 @@
+About vidprofile
+
+
+%!includeconf: incl-vidprofilerc.t2t
+%!include(html): incl-header.t2t
+%!include(xhtml): incl-header.t2t
+
+This chapter describes how vidprofile pulled itself out of the mire of disorganized bits on many far away computers.
+
+== History ==[history]
+
+vidprofile started out as a group of separate scripts designed to test certain flags of mpeg2enc. Why test at all? Well, tovid primarily uses mpeg2enc to make (S)VCD and DVD compatible video files. The exact behavior of the encoder was a bit of a mystery; predicting output file sizes was especially difficult. Also, the output quality was another fuzzy area. What did all of these options do exactly? And how significant were they?
+
+Once the variety of scripts covered all the options in mpeg2enc, they were merged and streamlined into profile. With a simple command, **``profile video.avi``**, every option of mpeg2enc could be tested (usually overnight). Around this time of vidprofile's development, the CVS version of mplayer saw some considerable improvement (and documentation completion), which raised the question: //What is the better encoder: mjpegtools' mpeg2enc or mplayer's libavcodec?// The debate sill goes on, but the developers were watching the mailing lists more closely. One CVS update caught their attention: a script that measured the Peak-Signal-to-Noise Ratio (PSNR) between two videos.
+
+Matthias Wieser is the author of that script, and his tool is included with mplayer's CVS. He used pnmpsnr from netpbm to measure the PSNR between individual frames. Then, he added some analysis to carry the figure across groups of frames and averaged over the entire video. Using his idea with some additional enhancements, PSNR calculation was added to profile.
+
+Shortly after that, the developers thought that other users may want to use this script, and they began to modify profile to make it more command-line friendly. Up until this point, setting parameters for every new profile involved editing the constants in the script and running again, something not acceptable for an application. profile needed to take command line arguments and use configuration files. After those updates were finished, this documentation was written, and the package was officially released.
+
+== Revision History==
+
+: **Revision 2:** //2005-11-15//
+  Converted source DocBook file to [txt2tags http://txt2tags.sf.net].
+: **Revision 1:** //2005-10-12//
+  Initial DocBook version. News, History, Installation, and man pages created.
+
+  
+Copyright (c)  2005 Joe Friedrichsen  //friedrij(at)users.berlios.de//
+
+This documentation is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+This documentation is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this documentation; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. A copy of the license can also be found at [gnu.org http://www.gnu.org/licenses/gpl.txt].
+
+
+%!include(html): incl-footer.t2t
+%!include(xhtml): incl-footer.t2t

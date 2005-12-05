@@ -1,0 +1,13 @@
+vidprofile THANKS file
+
+vidprofile was originally written by Joe Friedrichsen. 
+Many people further contributed to vidprofile by reporting problems,
+suggesting various improvements or submitting actual code.
+Here is a list of these people. Help me keep it complete and
+error free.
+
+Eric Pierce (wapcaplet88@yahoo.com)
+  code blocking -> profile
+
+Matthias Wieser (mwieser@gmx.de)
+  original idea -> psnr-core, vidpsnr
