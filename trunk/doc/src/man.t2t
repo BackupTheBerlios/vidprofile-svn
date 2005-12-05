@@ -1,0 +1,16 @@
+vidprofile man pages
+
+
+%!includeconf: incl-vidprofilerc.t2t
+%!include(html): incl-header.t2t
+%!include(xhtml): incl-header.t2t
+
+This is the html man page documentation for vidprofile, an open-source suite of tools for evaluating mpeg2enc from mjpegtools (and a daughter project of [tovid http://www.tovid.org]).
+
+- man [profile profile.html]: Analyze the options of mpeg2enc
+- man [vidpsnr vidpsnr.html]: Find the Peak-Signal-to-Noise Ratio between two videos.
+- man [psnrcore psnrcore.html]: Calculate the Peak-Signal-to-Noise Ratio (PSNR) between the frames of two videos.
+
+
+%!include(html): incl-footer.t2t
+%!include(xhtml): incl-footer.t2t

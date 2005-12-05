@@ -81,17 +81,15 @@ config.status: creating src/lib-vidprofile.sh
 
 === SVN builds ===[cvs]
 
-You can get a copy of the latest development version of vidprofile through Subversion (svn). To get this version, you need to have [SVN http://subversion.tigris.org/] installed.
+You can get a copy of the latest development version of vidprofile through Subversion (svn); and you can view it [online http://svn.berlios.de/wsvn/vidprofile]. To get this version, you need to have [SVN http://subversion.tigris.org/] installed.
 
 Using SVN is a little different; instead of just downloading vidprofile, you'll be "checking out" a copy of it. Using the same example directory as above:
 
 ``` 
 $ cd ~/Downloads
-$ cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/tovid login
-Logging in to :pserver:anonymous@cvs.sourceforge.net:2401/cvsroot/tovid
-CVS password:   (Enter)
-$ cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/tovid co -P test-tools
-$ cd test-tools
+$ svn checkout svn://svn.berlios.de/vidprofile/trunk
+<lots of output>
+$ cd trunk
 $ ./bootstrap
 $ ./configure
 $ make
