@@ -393,12 +393,6 @@ check_input()
      fi
      i=`expr $i + 1`
   done
-
-  # Touch the logs
-  touch "$LOGFILE"
-  touch "$ERROR_LOG"
-  touch "$ENC_LOG"
-  touch "$PSNR_FRAME_LOG"
 }
 
 # ******************************************************************************
@@ -412,7 +406,7 @@ set_up()
   # Gather input video file information
   FILE_ID=`md5sum $INFILE`
     
-  VID_SPECS=`mplayer -vo null -ao null -frames 1 -identify "$INFILE" 2>>$ERROR_LOG | grep -A 12 ID_FILENAME`     
+  VID_SPECS=`mplayer -vo null -ao null -frames 1 -identify "$INFILE" 2>>$ERROR_LOG | grep -A 20 ID_FILENAME`     
     
   # Find the length of the video to test    
   if test -z $LAST_FRAME; then
@@ -431,6 +425,7 @@ set_up()
   echo
     
   # Put a new header in the data log
+  touch "$LOGFILE"
   echo "\"Profile time:\",       \"$SCRIPT_START\""  >> "$LOGFILE"
   echo "\"md5sum:\",             \"$FILE_ID\"" >> "$LOGFILE"
   echo "\"Test baseline:\",      \"mpeg2enc $MP2_FIXED\"" >> "$LOGFILE"
@@ -449,12 +444,14 @@ set_up()
   echo "\"Option 1\", \"Option 1 Value\", \"Option 2\", \"Option 2 Value\", \"Video Duration (s)\", \"Encoding time (s)\", \"Output size (kB)\", \"Time Multiplier\", \"Output Bitrate (kbps)\", \"Normalized Time (%)\", \"Normalized Bitrate (%)\", \"PSNR (dB)\"" >> "$LOGFILE"
     
   # Put a new header in the error log
+  touch "$ERROR_LOG"
   echo "Profile time:       $SCRIPT_START"  >> "$ERROR_LOG"
   echo "md5sum:             $FILE_ID" >> "$ERROR_LOG"
   echo "Test baseline:      mpeg2enc $MP2_FIXED" >> "$ERROR_LOG"
   echo  >> "$ERROR_LOG"  
     
   # Put a new header in the encoding log
+  touch "$ENC_LOG"
   echo "Profile time:       $SCRIPT_START"  >> "$ENC_LOG"
   echo "md5sum:             $FILE_ID" >> "$ENC_LOG"
   echo "Test baseline:      mpeg2enc $MP2_FIXED" >> "$ENC_LOG"
@@ -468,6 +465,7 @@ set_up()
      mplayer $MPLAYER_OPTS $PSNR_MPLAY_FRAMES -vo $CONT_PNM "$INFILE" >> "$ENC_LOG" 2>&1
 
      # Put a new header in the psnr log
+     touch "$PSNR_FRAME_LOG"
      echo "\"Profile time:\",       \"$SCRIPT_START\""  >> "$PSNR_FRAME_LOG"
      echo "\"md5sum:\",             \"$FILE_ID\"" >> "$PSNR_FRAME_LOG"
      echo "\"Test baseline:\",      \"mpeg2enc $MP2_FIXED\"" >> "$PSNR_FRAME_LOG"
