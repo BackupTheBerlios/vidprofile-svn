@@ -55,6 +55,7 @@ The installation files will go into a subdirectory called PACKAGE within the cur
 ```
 $ cd ~/Downloads/PACKAGE
 $ ./configure
+$ make
 $ su -c "make install"
 ```
 
@@ -98,7 +99,7 @@ $ su -c "make install"
 
 === Uninstalling ===
 
-If you decide you don't want vidprofile installed anymore, run **``sudo make uninstall``** from the original installation directory (~/Downloads/PACKAGE or vidprofile's svn directory).
+If you decide you don't want vidprofile installed anymore, run **``su -c "make uninstall"``** from the original installation directory (~/Downloads/PACKAGE or vidprofile's svn directory).
 
 %!include(html): incl-footer.t2t
 %!include(xhtml): incl-footer.t2t
