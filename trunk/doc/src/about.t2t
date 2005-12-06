@@ -23,8 +23,12 @@ Shortly after that, the developers thought that other users may want to use this
   Converted source DocBook file to [txt2tags http://txt2tags.sf.net].
 : **Revision 1:** //2005-10-12//
   Initial DocBook version. News, History, Installation, and man pages created.
-
   
+: **Latest Source:** //%%date(%Y-%m-%d) at %%date(%H:%M) (UTC+9)//
+  - Complete html ([tarball vidprofile-html-docs.tar.gz])
+  - txt2tags t2t ([tarball vidprofile-t2t-docs.tar.gz])
+
+
 Copyright (c)  2005 Joe Friedrichsen  //friedrij(at)users.berlios.de//
 
 This documentation is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
