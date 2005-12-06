@@ -2,14 +2,15 @@
 
 # Pack up the html documentation for the vidprofile suite
 
-DOC_TAR="html-docs.tar"
+DOC_TAR="vidprofile-html-docs.tar"
 DOC_GZ="vidprofile-html-docs.tar.gz"
 
+./mkdocs
+
+cd html
+
 rm -fv $DOC_GZ
-
-`pwd`/mkdocs
-
-tar -cvvf $DOC_TAR *.html *.css fig/*
+tar -cvvf $DOC_TAR *.html *.php *.css fig/*
 gzip -v $DOC_TAR
 
 rm -fv $DOC_TAR
