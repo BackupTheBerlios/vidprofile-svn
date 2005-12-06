@@ -1,3 +1,6 @@
+2005-12-06 Joe Friedrichsen <friedrij@users.berlios.de>
+ vidprofile-0.80 released on berlios.de.
+
 2005-11-29 Joe Friedrichsen <friedrij@users.berlios.de>
  * Makefile.am:
      Proper building of the scripts.
