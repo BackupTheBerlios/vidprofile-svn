@@ -1,6 +1,6 @@
 
 % global settings
-%!preproc: "PACKAGE" "vidprofile-0.60"
+%!preproc: "PACKAGE" "vidprofile-0.80"
 
 % (x)html settings
 %!options(xhtml): --toc --css-sugar --encoding utf-8
