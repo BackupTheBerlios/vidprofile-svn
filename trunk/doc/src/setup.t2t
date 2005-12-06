@@ -37,23 +37,45 @@ vidprofile has only one more (optional) dependency than those required by tovid:
   
 == Installation ==
 
-=== Source tarball ===[source]
+At the moment, vidprofile is "under the radar" - it's very new, and it caters to an extremely small niche community. No package repositories have it (no .deb, no .rpm, no gentoo, no nothing). So, you'll have to get the source from berliOS (vidprofile's host).
+
+=== Get the source ===
+
+There are two ways you can get the source: from a tarball built by autotools or from Subversion.
+
+==== Source tarball ====[source]
 - [PACKAGE.tar.gz http://prdownloads.sourceforge.net/tovid/PACKAGE.tar.gz?download] contains the command-line scripts.
 
 
 Download the command-line package and save it on your computer. We'll assume it's saved in ~/Downloads.
 
-Next, open a terminal window (such as XTerm, RXVT, or Konsole) and extract the tarball by typing the following commands:
+Next, open a terminal window (such as XTerm, RXVT, or Konsole) and extract the tarball. The installation files will go into a subdirectory called PACKAGE within the current directory with these commands:
 
 ```
 $ cd ~/Downloads
 $ tar -xzvf PACKAGE.tar.gz
+$ cd PACKAGE
 ```
 
-The installation files will go into a subdirectory called PACKAGE within the current directory. Next, do the following:
+==== SVN source ====[cvs]
+
+You can get a copy of the latest development version of vidprofile through Subversion (svn); and you can view it [online http://svn.berlios.de/wsvn/vidprofile]. To get this version, you need to have [Subversion http://subversion.tigris.org/] installed and autotools ([automake http://www.gnu.org/software/automake/] and [autoconf http://www.gnu.org/software/autoconf/]) to prepare the raw source for building.
+
+Using SVN is a little different; instead of just downloading vidprofile, you'll be "checking out" a copy of it. Using the same example directory as above:
+
+``` 
+$ cd ~/Downloads
+$ svn checkout svn://svn.berlios.de/vidprofile/trunk
+<lots of output>
+$ cd trunk
+$ ./bootstrap
+```
+
+=== Configure, Compile, and Install ===
+
+Now that you have the source, configure, compile, and install the package:
 
 ```
-$ cd ~/Downloads/PACKAGE
 $ ./configure
 $ make
 $ su -c "make install"
@@ -80,24 +102,7 @@ config.status: creating doc/Makefile
 config.status: creating src/lib-vidprofile.sh
 ```
 
-=== SVN builds ===[cvs]
-
-You can get a copy of the latest development version of vidprofile through Subversion (svn); and you can view it [online http://svn.berlios.de/wsvn/vidprofile]. To get this version, you need to have [SVN http://subversion.tigris.org/] installed.
-
-Using SVN is a little different; instead of just downloading vidprofile, you'll be "checking out" a copy of it. Using the same example directory as above:
-
-``` 
-$ cd ~/Downloads
-$ svn checkout svn://svn.berlios.de/vidprofile/trunk
-<lots of output>
-$ cd trunk
-$ ./bootstrap
-$ ./configure
-$ make
-$ su -c "make install" 
-```
-
-=== Uninstalling ===
+== Uninstalling ==
 
 If you decide you don't want vidprofile installed anymore, run **``su -c "make uninstall"``** from the original installation directory (~/Downloads/PACKAGE or vidprofile's svn directory).
 
