@@ -2,15 +2,39 @@
 
 # Pack up the html documentation for the vidprofile suite
 
-DOC_TAR="vidprofile-html-docs.tar"
-DOC_GZ="vidprofile-html-docs.tar.gz"
+HTML_TAR="vidprofile-html-docs.tar"
+HTML_GZ="vidprofile-html-docs.tar.gz"
+HTML_DIR="html"
 
-./mkdocs
+T2T_TAR="vidprofile-t2t-docs.tar"
+T2T_GZ="vidprofile-t2t-docs.tar.gz"
+T2T_DIR="src"
 
-cd html
+PKDOCS_PWD=`pwd`
 
-rm -fv $DOC_GZ
-tar -cvvf $DOC_TAR *.html *.php *.css fig/*
-gzip -v $DOC_TAR
+$PKDOCS_PWD/mkdocs
 
-rm -fv $DOC_TAR
+echo
+echo "Packing html files..."
+echo
+
+cd $PKDOCS_PWD/$HTML_DIR
+
+rm -fv $HTML_GZ
+tar -cvvf $HTML_TAR *.html *.php *.css fig/*
+gzip -v $HTML_TAR
+rm -fv $HTML_TAR
+
+echo
+echo "Packing t2t files..."
+echo
+
+cd $PKDOCS_PWD/$T2T_DIR
+
+rm -fv $T2T_GZ
+tar -cvvf $T2T_TAR *.t2t *.html
+gzip -v $T2T_TAR
+rm -fv $T2T_TAR
+mv -v $T2T_GZ $PKDOCS_PWD/$HTML_DIR
+
+echo
