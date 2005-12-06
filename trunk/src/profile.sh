@@ -511,7 +511,7 @@ range_test()
   do
     pre_test
     
-    OUTFILE="profiler_${TEST_OPT}_${VAR}"
+    OUTFILE="profile_${TEST_OPT}_${VAR}"
     CMD="$MP2_FIXED $TEST_OPT $VAR -o $OUTFILE.mpg"
     
     encode
@@ -555,7 +555,7 @@ dual_range()
     do
       pre_test
       
-      OUTFILE="profiler_${TEST_OPT1}_${VAR1}_${TEST_OPT2}_${VAR2}"
+      OUTFILE="profile_${TEST_OPT1}_${VAR1}_${TEST_OPT2}_${VAR2}"
       CMD="$MP2_FIXED $TEST_OPT1 $VAR1 $TEST_OPT2 $VAR2 -o $OUTFILE.mpg"
       
       encode
@@ -589,7 +589,7 @@ flag_test()
  
   pre_test
   
-  OUTFILE="profiler_${FLAG}"
+  OUTFILE="profile_${FLAG}"
   CMD="$MP2_FIXED $FLAG -o $OUTFILE.mpg"
   
   encode
@@ -628,7 +628,7 @@ G_g_test()
     while test $VAR2 -le $VAR1; do
       pre_test
       
-      OUTFILE="profiler_${TEST_OPT1}_${VAR1}_${TEST_OPT2}_${VAR2}"
+      OUTFILE="profile_${TEST_OPT1}_${VAR1}_${TEST_OPT2}_${VAR2}"
       CMD="$MP2_FIXED $TEST_OPT1 $VAR1 $TEST_OPT2 $VAR2 -o $OUTFILE.mpg"
       
       encode
