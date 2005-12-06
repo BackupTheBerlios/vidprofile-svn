@@ -91,24 +91,22 @@ From this test, we can see that -b is a strong limiter, and providing a lower -q
 So how do we make that chart? Well when profile finishes, the terminal will look something like this:
 
 ```
-$ profile -f test-video.avi -c profile.conf
-Using config file /home/user/.tovid/profile.conf, containing the following options:
-(none)
+user@localhost:~$ profile -f test-video.avi -c profile.conf
 
-Overriding default configuration file.
-Using config file /home/user/profile.conf, containing the following options:
+Overriding default configuration file (if it exists).
+Using config file profile.conf, containing the following options:
 -t "-H" -t "-b 500 9500 500" -t "-q 1 20 1" -t "-b 500 9500 500 -q 1 20 1"
 
-md5sum:            d49835edfd34610d4eb615a07c12fdb1  /home/user/test-video.avi
-Video Duration:    15.01 sec
+md5sum:            d49835edfd34610d4eb615a07c12fdb1 /home/user/test-video.avi
+Video Duration:    23.56 sec
 mpeg2enc baseline: -a 2 -n n -f 8 -F 4
 
 Testing -a 2 -n n -f 8 -F 4 -o control_end.mpg
 
 All finished profiling test-video.avi with mpeg2enc.
-You have 422 new data points! (in /home/user/.tovid/profile.csv)
-I started on       Sat 19 Nov 2005 12:00:30 AM JST
-and finished on    Sat 19 Nov 2005 03:10:29 AM JST.
+You have 422 new data points! (in /home/user/.vidprofile/profile.csv)
+I started on       Tue 06 Dec 2005 08:06:00 AM JST
+and finished on    Tue 06 Dec 2005 01:14:50 PM JST.
 ```
 
 All we have is a big data file, but it's easier to look at charts. Importing the data file to an application like [OpenOffice.org http://www.openoffice.org] is simple. Start OpenOffice Calc and open the data file (~/.vidprofile/profile.csv). It will open a dialog box asking you how to interpret the file. Make sure that **Comma**, **Space**, and **Merge delimiters** are checked, and that the **Text delimiter** is a double quote: **``"``**.
