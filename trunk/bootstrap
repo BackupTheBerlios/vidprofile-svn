@@ -1,12 +1,12 @@
 #! /bin/sh
 
-# Call this script after editing configure.in or Makefile.am
+# Call this script after editing configure.ac or Makefile.am
 # then:
 # $ ./configure
 # $ make
 # $ make install
 
-# Copyright (C) 2005 Joe Friedrichsen <pengi.films@gmail.com>
+# Copyright (C) 2005 Joe Friedrichsen <friedrij@users.berlios.de>
 # 
 # This program is free software; you can redistribute it and/or 
 # modify it under the terms of the GNU General Public License 

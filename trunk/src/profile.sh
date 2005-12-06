@@ -22,7 +22,7 @@
 # TO-DO:
 # (1) Adapt for long movies: allow inpoints and outpoints
 
-# Copyright (C) 2005 Joe Friedrichsen <pengi.films@gmail.com>
+# Copyright (C) 2005 Joe Friedrichsen <friedrij@users.berlios.de>
 # Original script pieces by Eric Pierce.
 # Modified on 2005 September 23.
 # 

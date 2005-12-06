@@ -31,7 +31,7 @@
 #         (2) a log file of the PSNR for every frame (as given by the input
 #             pointer).
 
-# Copyright (C) 2005 Joe Friedrichsen <pengi.films@gmail.com>
+# Copyright (C) 2005 Joe Friedrichsen <friedrij@users.berlios.de>
 # Original shell script by Matthias Wieser, available in MPlayer CVS.
 # Modified on 2005 September 23.
 # 

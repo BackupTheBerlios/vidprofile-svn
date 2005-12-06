@@ -1,4 +1,4 @@
-2005-11-29 Joe Friedrichsen <pengi.films@gmail.com>
+2005-11-29 Joe Friedrichsen <friedrij@users.berlios.de>
  * Makefile.am:
      Proper building of the scripts.
 
@@ -22,7 +22,7 @@
  * man pages:
      Written and added; created with txt2tags (sf.net).
 
-2005-10-25 Joe Friedrichsen <pengi.films@gmail.com>
+2005-10-25 Joe Friedrichsen <friedrij@users.berlios.de>
  * lib-vidprofile:
      Common functions and constants taken from the suite to create
           a new library.
@@ -47,7 +47,7 @@
  * vidpsnr:
      Added -help option and formatted usage guide.
 
-2005-10-02 Joe Friedrichsen <pengi.films@gmail.com>
+2005-10-02 Joe Friedrichsen <friedrij@users.berlios.de>
  * profile:
      Added command line interpretation for every option. Basic input
           checks are also carried out.
@@ -60,7 +60,7 @@
           line options following the config file will override the
           options given in the file.
 
-2005-09-23  Joe Friedrichsen  <pengi.films@gmail.com>
+2005-09-23  Joe Friedrichsen  <friedrij@users.berlios.de>
 
  * profile: 
      Added Peak Signal to Noise Ratio calculation.
