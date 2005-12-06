@@ -1,6 +1,6 @@
 # Process this file with automake to produce a Makefile.in
 
-# Copyright (C) 2005 Joe Friedrichsen <pengi.films@gmail.com>
+# Copyright (C) 2005 Joe Friedrichsen <friedrij@users.berlios.de>
 # 
 # This program is free software; you can redistribute it and/or 
 # modify it under the terms of the GNU General Public License 
