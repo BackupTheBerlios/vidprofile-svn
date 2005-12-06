@@ -4,6 +4,8 @@
 # input files. See http://txt2tags.sourceforge.net/ for
 # documentation on the input format.
 
+ME="[mkdocs ]:"
+
 SOURCE="./src"
 HTML_DEST="./html"
 MAN_DEST="."
@@ -12,14 +14,16 @@ MAN_DEST="."
 TOHTML_OPTS="-t xhtml"
 TOHTML_FILES=`find $SOURCE -name "*.t2t" -and -not -name "incl-*.t2t" | sort`
 
-rm -vf $HTML_DEST/*.html
-rm -vf $MAN_DEST/*.man
+rm -f $HTML_DEST/*.html
+rm -f $MAN_DEST/*.man
+
+echo "$ME Making html files..."
 
 for FILE in $TOHTML_FILES
 do
     INFILE="--infile=$FILE"
     OUTFILE="--outfile=$HTML_DEST/`basename $FILE .t2t`.html"
-    txt2tags $TOHTML_OPTS $INFILE $OUTFILE
+    txt2tags $TOHTML_OPTS $INFILE $OUTFILE >> /dev/null
 done
 
 # Generate manpages
@@ -28,11 +32,16 @@ TOMAN_FILES="src/profile.t2t \
              src/vidpsnr.t2t \
              src/psnrcore.t2t"
 
+echo "$ME Making man pages..."
+
 for FILE in $TOMAN_FILES
 do
     INFILE="--infile=$FILE"
     OUTFILE="--outfile=$MAN_DEST/`basename $FILE .t2t`.man"
-    txt2tags $TOMAN_OPTS $INFILE $OUTFILE
+    txt2tags $TOMAN_OPTS $INFILE $OUTFILE >> /dev/null
 done
+
+echo "$ME Docs made!"
+echo
 
 exit 0

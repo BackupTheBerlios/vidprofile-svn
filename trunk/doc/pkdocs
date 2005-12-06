@@ -3,6 +3,8 @@
 # pkdocs
 # Pack up the html documentation for the vidprofile suite
 
+ME="[pkdocs ]:"
+
 HTML_TAR="vidprofile-html-docs.tar"
 HTML_GZ="vidprofile-html-docs.tar.gz"
 HTML_DIR="html"
@@ -13,31 +15,30 @@ T2T_DIR="src"
 
 PKDOCS_PWD=`pwd`
 
+echo "$ME Executing mkdocs..."
+echo
 $PKDOCS_PWD/mkdocs
 
-echo
-echo "Packing html files..."
-echo
+echo "$ME Packing html files..."
 
 cd $PKDOCS_PWD/$HTML_DIR
 
-rm -fv $HTML_GZ
-tar -cvvf $HTML_TAR *.html *.php *.css fig/*
-gzip -v $HTML_TAR
-rm -fv $HTML_TAR
+rm -f $HTML_GZ
+tar -cf $HTML_TAR *.html *.php *.css fig/*
+gzip $HTML_TAR
+rm -f $HTML_TAR
 
-echo
-echo "Packing t2t files..."
-echo
+echo "$ME Packing t2t files..."
 
 cd $PKDOCS_PWD/$T2T_DIR
 
-rm -fv $T2T_GZ
-tar -cvvf $T2T_TAR *.t2t *.html
-gzip -v $T2T_TAR
-rm -fv $T2T_TAR
-mv -v $T2T_GZ $PKDOCS_PWD/$HTML_DIR
+rm -f $T2T_GZ
+tar -cf $T2T_TAR *.t2t *.html
+gzip $T2T_TAR
+rm -f $T2T_TAR
+mv $T2T_GZ $PKDOCS_PWD/$HTML_DIR
 
+echo "$ME Docs packed!"
 echo
 
 exit 0
