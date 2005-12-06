@@ -7,7 +7,7 @@ vidprofile homepage
 
 This is the official documentation (and website) for vidprofile, an open-source suite of tools for evaluating mpeg2enc from mjpegtools (and a daughter project of [tovid http://www.tovid.org]).
 
-The latest release is **PACKAGE**. **[Download it http://www.berlios.de/naninani]** from berliOS.
+The latest release is **PACKAGE**. **[Download it DOWNLOAD_URL/PACKAGE.tar.gz]** from berliOS.
 
 == What is vidprofile? ==[introduction]
 
@@ -36,6 +36,7 @@ Encoding any given video to MPEG-2 is a complex thing, just type **``man mpeg2en
 == News ==[news]
 
 **Newest on top** (get [rss http://developer.berlios.de/export/rss_project.php?group_id=5477] feeds!)
+- 2005-12-06: vidprofile-0.80 released! [Get it. DOWNLOAD_URL/vidprofile-0.80.tar.gz]
 - 2005-12-04: project launched on [berliOS http://www.berlios.de].
 - 2005-11-15: documentation re-written with [txt2tags http://txt2tags.sf.net].
 - 2005-10-02: vidprofile-0.alpha is birthed.

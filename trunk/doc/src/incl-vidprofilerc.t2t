@@ -1,6 +1,7 @@
 
 % global settings
 %!preproc: "PACKAGE" "vidprofile-0.80"
+%!preproc: "DOWNLOAD_URL" "http://download.berlios.de/vidprofile"
 
 % (x)html settings
 %!options(xhtml): --toc --css-sugar --encoding utf-8

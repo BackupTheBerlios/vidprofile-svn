@@ -7,7 +7,7 @@ Set up
 
 This chapter explains what is needed to run the vidprofile suite and how to install it on your system.
 
-The latest release is **PACKAGE**. **[Download it http://www.berlios.de/naninani]** from berliOS.
+The latest release is **PACKAGE**. **[Download it DOWNLOAD_URL/PACKAGE.tar.gz]** from berliOS.
 
 == Preliminaries ==
 
@@ -44,7 +44,7 @@ At the moment, vidprofile is "under the radar" - it's very new, and it caters to
 There are two ways you can get the source: from a tarball built by autotools or from Subversion.
 
 ==== Source tarball ====[source]
-- [PACKAGE.tar.gz http://prdownloads.sourceforge.net/tovid/PACKAGE.tar.gz?download] contains the command-line scripts.
+- [PACKAGE.tar.gz DOWNLOAD_URL/PACKAGE.tar.gz] contains the command-line scripts.
 
 
 Download the command-line package and save it on your computer. We'll assume it's saved in ~/Downloads.
