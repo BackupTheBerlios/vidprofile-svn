@@ -27,7 +27,7 @@ Encoding any given video to MPEG-2 is a complex thing, just type **``man mpeg2en
 
 == Help ==[help]
 
-- The mailing list: vidprofile-users ([subscribe https://lists.berlios.de/mailman/listinfo/vidprofile-users]) ([archives https://lists.berlios.de/pipermail/vidprofile-users])
+- The mailing list: vidprofile-users ([subscribe https://lists.berlios.de/mailman/listinfo/vidprofile-users]) (archives [@berliOS https://lists.berlios.de/pipermail/vidprofile-users] [@gmane http://dir.gmane.org/gmane.comp.video.vidprofile.user])
 - The forums: [@berliOS http://developer.berlios.de/forum/?group_id=5477]
 - Report a [bug http://developer.berlios.de/bugs/?group_id=5477]
 - Get [patches http://developer.berlios.de/patch/?group_id=5477]
@@ -35,8 +35,8 @@ Encoding any given video to MPEG-2 is a complex thing, just type **``man mpeg2en
 
 == News ==[news]
 
-**Newest on top** (get [rss http://developer.berlios.de/export/rss_project.php?group_id=5477] feeds!)
-- 2005-12-06: vidprofile-0.80 released! [Get it. DOWNLOAD_URL/vidprofile-0.80.tar.gz]
+**Newest on top** (get [rss http://developer.berlios.de/export/rss_project.php?group_id=5477] feeds! new releases, bugs, patches, and more)
+- 2005-12-06: vidprofile-0.80 released! [Get it DOWNLOAD_URL/vidprofile-0.80.tar.gz].
 - 2005-12-04: project launched on [berliOS http://www.berlios.de].
 - 2005-11-15: documentation re-written with [txt2tags http://txt2tags.sf.net].
 - 2005-10-02: vidprofile-0.alpha is birthed.
