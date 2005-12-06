@@ -71,6 +71,8 @@ $ cd trunk
 $ ./bootstrap
 ```
 
+Want to stay current? Get notified when commits are made to the repository. Join the notice list: vidprofile-svn ([subscribe https://lists.berlios.de/mailman/listinfo/vidprofile-svn]) (archives [@berliOS https://lists.berlios.de/pipermail/vidprofile-svn] [@gmane http://dir.gmane.org/gmane.comp.video.vidprofile.cvs])
+
 === Configure, Compile, and Install ===
 
 Now that you have the source, configure, compile, and install the package:
