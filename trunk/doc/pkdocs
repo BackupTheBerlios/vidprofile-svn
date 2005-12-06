@@ -39,3 +39,5 @@ rm -fv $T2T_TAR
 mv -v $T2T_GZ $PKDOCS_PWD/$HTML_DIR
 
 echo
+
+exit 0
