@@ -5,7 +5,7 @@ profile analysis
 %!include(html): incl-header.t2t
 %!include(xhtml): incl-header.t2t
 
-This chapter explains and outlines profiles of specific (publically available) videos. The goal is to find the best mpeg2enc options for a given file size limit.
+This chapter explains and outlines profiles of specific (publicly available) videos. The goal is to find the best mpeg2enc options for a given file size limit.
 
 == Introduction ==
 
