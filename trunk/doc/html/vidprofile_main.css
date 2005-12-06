@@ -1,0 +1,399 @@
+/* screen.css
+ * CSS stylesheet definition for the tovid documentation
+ * http://tovid.sourceforge.net/
+ */
+
+/*
+ * Body and link styles
+ */
+body {
+  /*font-family: Arial, Helvetica, sans-serif;*/
+    font-family: sans-serif;
+    font-size: 15px;
+    color: #000;
+    background: #EEEEEE;
+    margin: 2em;
+    padding: 1em;
+}
+
+a { color: #00B; text-decoration: none; background: transparent; }
+a:hover {
+    background: #FFE;
+    border-width: 1px 0;
+    border-style: dotted;
+    border-color: #44C;
+}
+a:visited { color: #A00D31; }
+
+.toc {
+    float: left;
+    padding: 0;
+    margin: 1em 3em 2em 1em;
+    font-family: Georgia, serif;
+}
+
+.toc a {
+    color: #655735;
+    text-decoration: none;
+}
+
+.toc ul {
+    list-style: circle;
+}
+
+h1 {
+    color: #FFF;
+    border-bottom: 8px solid #D6B870;
+    padding: 0.5em;
+    background: #655735;
+}
+
+h2 {
+    color: #000;
+    padding: 0.5em;
+    margin: 2em 0 1em 0;
+    border-width: 0px 0 5px 0;
+    border-style: solid;
+    border-color: #655735;
+    clear: both;
+    text-shadow: #997 -0.2em 0.2em 0.2em;
+    background: #D6B870;
+}
+
+h3 {
+    color: #000;
+    font-style: italic;
+    margin: 2em 1em 1em 1em;
+    padding: 0.5em;
+    border-width: 0px 0 3px 0;
+    border-style: solid;
+    border-color: #00B;
+    clear: left;
+    text-shadow: #CCB -0.3em 0.3em 0.2em;
+    background: #D6B870;
+}
+
+h4 {
+    color: #008;
+    font-style: italic;
+    margin: 2em 1em 1em 1em;
+    padding: 0.5em;
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: #008;
+    clear: left;
+    text-shadow: #CCB -0.3em 0.3em 0.2em;
+}
+
+.body > p,
+.body > dl,
+.body > ul
+{
+    margin: 2em;
+    text-align: justify;
+}
+
+/* Top Navigation links */
+
+.body > ul:first-child
+{
+    margin-top: 1em;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.body > ul:first-child li
+{
+    float: left;
+    margin: 0.6em;
+    padding: 0;
+    font-weight: bold;
+}
+.body > ul:first-child li:before
+{
+    content: '~';
+}
+
+pre
+{
+    color: #000;
+    padding: 1.5em;
+    margin: 0.5em 2em;
+    background: #F8F8F8;
+    border: 1px dotted #888;
+}
+
+
+/*
+code { font-weight: normal !important; }
+.command { font-family: monospace; }
+.prompt { color: #33D; }
+.userinput { color: #000; }
+.computeroutput { color: #D33; }
+.filename { color: #080; }
+
+pre {
+    padding: 1em;
+    margin: 2em 4em;
+}
+
+.programlisting {
+    border-width: 1px 3px;
+    border-color: #ACA;
+    border-style: dashed groove;
+    background: #EFE;
+    background-image: url("images/green_bar.png");
+}
+.screen {
+    border-width: 3px;
+    padding-top: 36px;
+    border-color: #77A;
+    border-style: ridge;
+    background: #F0F0F0;
+    background-image: url("images/titlebar_bg.png");
+    background-repeat: repeat-x;
+    background-position: top;
+}
+
+blockquote {
+  margin: 2em 4em 2em 4em;
+  border: 1px dashed #AAA;
+  font-style: italic;
+}
+
+div.qandaset dl dt {
+    background: white;
+    border: 1px dotted black;
+    padding: 0.3em;
+    margin: 0;
+    font-weight: normal;
+}
+
+div.qandaset table {
+    margin: 2em;
+    border-collapse: collapse;
+}
+
+tr.question td {
+    font-weight: bold;
+    font-size: 120%;
+    padding: 0;
+    margin: 0;
+}
+
+tr.answer td {
+    background: #FFF;
+    padding: 1em 0;
+}
+
+dl { margin: 0 3em 0 3em; }
+dt { font-weight: bold; color: #955; }
+dd { margin: 1em 2em 1em 2em; }
+dd p { margin: 0; }
+
+div.chapter {
+    margin: 0;
+}
+
+
+ul,ol {
+  padding: 0 0 0 2em;
+  margin: 0 0 0 2em;
+}
+
+
+li p {
+  padding: 0;
+  margin: 0;
+}
+
+p {
+  text-align: justify;
+  margin: 1em 2em 1.5em 2em;
+}
+
+.note {
+    border-width: 2px 4px 4px 2px;
+    border-color: #CC9;
+    border-style: ridge;
+    background: #FFE;
+    padding: 0.8em;
+}
+
+div.note div.title {
+    font-weight: bold;
+}
+
+#navigation
+{
+  padding: 0.5em;
+  margin: 1em 0 1em 0;
+  text-align: center;
+  background: #EFE;
+  border: 2px dotted black;
+}
+tr { vertical-align: top; }
+
+div.figure p.title
+{
+    text-align: center;
+}
+
+.figure
+{
+    margin: 1.5em;
+    text-align: center;
+}
+.informalfigure
+{
+    margin: 1em;
+    text-align: right;
+}
+
+.screenshot
+{
+    margin: 0 4em 0 4em;
+    text-align: center;
+}
+
+.guilabel
+{
+    font-weight: bold;
+}
+
+.guibutton
+{
+    border: 1px solid #CCC;
+    padding: 0.1em 0.3em 0.1em 0.3em;
+    background: #EEE;
+}
+
+.application
+{
+    font-weight: bold;
+    color: #B55;
+}
+
+div.refentry
+{
+    margin: 1em;
+    padding: 2em;
+    background: #FFF;
+    border: 1px solid black;
+}
+
+div.sect1
+{
+    margin: 2em 0;
+    padding: 2em;
+    clear: both;
+    border: 1px solid black;
+    background: white url( "images/bg_film_white.jpg" ) 0 0 no-repeat fixed;
+}
+
+
+div.chapter>p {
+    margin: 0.5em 5em;
+}
+
+
+div.list-of-figures {
+    clear: left;
+    border: 1px dotted black;
+    padding: 2em;
+    margin: 3em;
+    background: #EEE;
+}
+div.list-of-figures p { margin: 0 0 1em 0; }
+div.list-of-figures dl { margin: 0; }
+div.list-of-figures dl > dt {
+    font-weight: normal;
+    margin: 0 0 0 2em;
+    color: #000;
+}
+div.list-of-figures dl > dd {
+    font-weight: normal;
+    margin: 0 0 0 2em;
+    color: #000;
+}
+*/
+
+
+
+/* CSS pop-out navigation menu
+ * Adapted from Nick Rigby's:
+ * http://www.nickrigby.com/article/25/drop-down-menus-horizontal-style-pt-3 
+ */
+ /*
+ul#navmenu {
+    margin: 2em;
+    padding: 0;
+
+    width: 9em;
+    font-family: Verdana, sans-serif;
+    text-shadow: #999 0.1em 0.1em 0.1em;
+    float: right;
+}
+
+ul#navmenu ul {
+    width: 9em;
+    margin: 0;
+    padding: 0;
+	position: absolute;
+	right: 9em;
+	top: 0;
+	display: none;
+}
+
+ul#navmenu li {
+	position: relative;
+	list-style: none;
+}
+
+ul#navmenu li a {
+	display: block;
+	text-decoration: none;
+    background: #E0E9C5;
+	color: black;
+	padding: 0.5em;
+	border: 1px solid black;
+    margin: 0;
+    text-align: right;
+}
+
+/* Fix IE. Hide from IE Mac \*/
+/*
+* html ul#navmenu li { float: left; height: 1%; }
+* html ul#navmenu li a { height: 1%; }
+/* End */
+
+/*
+ul#navmenu li ul li a { padding: 0.5em; } /* Sub Menu Styles */
+
+/*
+ul#navmenu li:hover ul ul,
+ul#navmenu li:hover ul ul ul,
+ul#navmenu li.over ul ul,
+ul#navmenu li.over ul ul ul { display: none; } /* Hide sub-menus initially */
+
+/*
+ul#navmenu li:hover ul,
+ul#navmenu li li:hover ul,
+ul#navmenu li li li:hover ul,
+ul#navmenu li.over ul,
+ul#navmenu li li.over ul,
+ul#navmenu li li li.over ul {
+    display: block;
+}
+
+ul#navmenu li.menuparent>a:before { content: '<- '; }
+
+ul#navmenu li.menuparent:hover,
+ul#navmenu li.over {
+}
+ul#navmenu li a:hover {
+    background: #F8F8F7 url( "images/bg_film_sepia.jpg" ) 0 0 no-repeat fixed;
+    color: #36A;
+    border-color: #753;
+}*/
