@@ -18,15 +18,18 @@ Matthias Wieser is the author of that script, and his tool is included with mpla
 Shortly after that, the developers thought that other users may want to use this script, and they began to modify profile to make it more command-line friendly. Up until this point, setting parameters for every new profile involved editing the constants in the script and running again, something not acceptable for an application. profile needed to take command line arguments and use configuration files. After those updates were finished, this documentation was written, and the package was officially released.
 
 == Revision History==
-
+: **Revision 3:** //2005-12-09//
+  Updated installation instructions for Subversion and the usage guide.
 : **Revision 2:** //2005-11-15//
   Converted source DocBook file to [txt2tags http://txt2tags.sf.net].
 : **Revision 1:** //2005-10-12//
   Initial DocBook version. News, History, Installation, and man pages created.
   
-: **Latest Source:** //%%date(%Y-%m-%d) at %%date(%H:%M) (UTC+9)//
-  - Complete html ([tarball DOC_ARCHIVE_URL/vidprofile-html-docs.tar.gz])
-  - txt2tags t2t ([tarball DOC_ARCHIVE_URL/vidprofile-t2t-docs.tar.gz])
+: **Source:** //(via ftp only)//
+  - **Latest:** //%%date(%Y-%m-%d) at %%date(%H:%M) (UTC+9)//
+    - web html ([tarball DOC_ARCHIVE_URL/vidprofile-html-docs.tar.gz]) 
+    - Latest txt2tags t2t ([tarball DOC_ARCHIVE_URL/vidprofile-t2t-docs.tar.gz]) 
+  - Download [old versions DOC_ARCHIVE_URL].
 
 
 Copyright (c)  2005 Joe Friedrichsen  //friedrij(at)users.berlios.de//
