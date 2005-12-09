@@ -25,8 +25,8 @@ Shortly after that, the developers thought that other users may want to use this
   Initial DocBook version. News, History, Installation, and man pages created.
   
 : **Latest Source:** //%%date(%Y-%m-%d) at %%date(%H:%M) (UTC+9)//
-  - Complete html ([tarball vidprofile-html-docs.tar.gz])
-  - txt2tags t2t ([tarball vidprofile-t2t-docs.tar.gz])
+  - Complete html ([tarball DOC_ARCHIVE_URL/vidprofile-html-docs.tar.gz])
+  - txt2tags t2t ([tarball DOC_ARCHIVE_URL/vidprofile-t2t-docs.tar.gz])
 
 
 Copyright (c)  2005 Joe Friedrichsen  //friedrij(at)users.berlios.de//
