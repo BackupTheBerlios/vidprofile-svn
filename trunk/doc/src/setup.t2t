@@ -75,12 +75,10 @@ Want to stay current? Get notified when commits are made to the repository. Join
 
 === Configure, Compile, and Install ===
 
-Now that you have the source, configure, compile, and install the package:
+Now that you have the source, configure, compile, and install the package. First, configure it:
 
 ```
 $ ./configure
-$ make
-$ su -c "make install"
 ```
 
 ./configure will search your system for the dependencies vidprofile has and summarize what it found at the end. Be sure to look carefully that everything is there. An example successful ./configure summary is:
@@ -102,6 +100,13 @@ config.status: creating Makefile
 config.status: creating src/Makefile
 config.status: creating doc/Makefile
 config.status: creating src/lib-vidprofile.sh
+```
+
+Then compile and install your properly configured package:
+
+```
+$ make
+$ su -c "make install"
 ```
 
 == Uninstalling ==

@@ -18,7 +18,7 @@ Matthias Wieser is the author of that script, and his tool is included with mpla
 Shortly after that, the developers thought that other users may want to use this script, and they began to modify profile to make it more command-line friendly. Up until this point, setting parameters for every new profile involved editing the constants in the script and running again, something not acceptable for an application. profile needed to take command line arguments and use configuration files. After those updates were finished, this documentation was written, and the package was officially released.
 
 == Revision History==
-: **Revision 3:** //2005-12-09//
+: **Revision 2.1:** //2005-12-10//
   Updated installation instructions for Subversion and revised the usage guide.
 : **Revision 2:** //2005-11-15//
   Converted source DocBook file to [txt2tags http://txt2tags.sf.net].
