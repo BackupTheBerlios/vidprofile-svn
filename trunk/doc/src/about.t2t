@@ -28,7 +28,7 @@ Shortly after that, the developers thought that other users may want to use this
 : **Source:** //(via ftp only)//
   - **Latest:** //%%date(%Y-%m-%d) at %%date(%H:%M) (UTC+9)//
     - web html ([tarball DOC_ARCHIVE_URL/vidprofile-html-docs.tar.gz]) 
-    - Latest txt2tags t2t ([tarball DOC_ARCHIVE_URL/vidprofile-t2t-docs.tar.gz]) 
+    - txt2tags t2t ([tarball DOC_ARCHIVE_URL/vidprofile-t2t-docs.tar.gz]) 
   - Download [old versions DOC_ARCHIVE_URL].
 
 
