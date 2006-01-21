@@ -61,39 +61,44 @@ AM_INIT_AUTOMAKE
 # ******************************************************************************
 
 AC_MSG_NOTICE([Checking for required dependencies...])
-AC_CHECK_PROG(GREP, [grep], [ok], [NOT FOUND])
-AC_CHECK_PROG(MPLAYER, [mplayer], [ok], [NOT FOUND])
-AC_CHECK_PROG(MPEG2ENC, [mpeg2enc], [ok], [NOT FOUND])
-AC_CHECK_PROG(BC, [bc], [ok], [NOT FOUND])
+AC_CHECK_PROG(GREP, [grep], [ok], [MISSING])
+AC_CHECK_PROG(MPLAYER, [mplayer], [ok], [MISSING])
+AC_CHECK_PROG(MPEG2ENC, [mpeg2enc], [ok], [MISSING])
+AC_CHECK_PROG(BC, [bc], [ok], [MISSING])
 
 # ------------------------------------------------------------------------------
 # Complain about missing required dependencies. If some are missing, list all
 # missing ones before failing and exiting.
 
+grep_msg="a GNU utility (http://www.gnu.org/software/grep)"
+mplayer_msg="part of mplayer (http://www.mplayerhq.hu)"
+mpeg2enc_msg="part of mjpegtools (http://mjpeg.sf.net}"
+bc_msg="a GNU utility (http://directory.fsf.org/GNU/bc.html)"
+
 # Sneaky make-do array. 
-REQ_DEP_LIST="grep=$GREP:mplayer=$MPLAYER:mpeg2enc=$MPEG2ENC:bc=$BC"
+REQ_DEP_LIST="grep=$GREP mplayer=$MPLAYER mpeg2enc=$MPEG2ENC bc=$BC"
 
 # We can use gawk with confidence because the above
 # initiation macros look for it and will exit if gawk isn't found.
 FAIL=false
-i=1
-while test $i -le `echo "$REQ_DEP_LIST" | gawk -F ':' '{ print NF }'`; do
-   DEP=`echo $REQ_DEP_LIST | gawk -F ':' "{ print $"$i" }"`
+for DEP in $REQ_DEP_LIST; do
    NAME=`echo $DEP | gawk -F '=' '{ print $1 }'`
    FOUND=`echo $DEP | gawk -F '=' '{ print $2 }'`
-   if test "x$FOUND" != "xok"; then
-     AC_MSG_WARN([Cannot find REQUIRED dependency: $NAME])
+   if test "x$FOUND" = "xMISSING"; then
      FAIL=:
+     ERR_MSG=$`eval echo ${NAME}_msg`
+     ERR_MSG=`eval echo $ERR_MSG`
+     MISSING_DEPS=`echo "$MISSING_DEPS"; printf "    %-9s %s\n" "$NAME" "$ERR_MSG"`
    fi
-   i=`expr $i + 1`
 done
 
 if $FAIL; then
  AC_MSG_ERROR([
 
- Could not find the above REQUIRED dependencies.
- Please install the missing dependencies and ./configure again.
- See vidprofile.berlios.de for links.
+  Could not find these REQUIRED dependencies:
+$MISSING_DEPS
+ 
+  Please install the missing dependencies and ./configure again.
 ])
 fi
 
@@ -111,7 +116,7 @@ pnmpsnr_msg="(cannot measure PSNR)"
 
 # ------------------------------------------------------------------------------
 # Check for Peak Signal to Noise Ratio dependencies
-AC_CHECK_PROG(PNMPSNR, [pnmpsnr], [ok], [NOT FOUND])
+AC_CHECK_PROG(PNMPSNR, [pnmpsnr], [ok], [MISSING])
 
 if test "x$PNMPSNR" = "xok"; then
    HAVE_PSNR="pnmpsnr"
@@ -126,22 +131,23 @@ fi
 # Sneaky make-do array. 
 OPT_DEP_LIST="pnmpsnr=$PNMPSNR"
 
-i=1
-while test $i -le `echo "$OPT_DEP_LIST" | gawk -F ':' '{ print NF }'`; do
-   DEP=`echo $OPT_DEP_LIST | gawk -F ':' "{ print $"$i" }"`
+for DEP in $OPT_DEP_LIST; do
    NAME=`echo $DEP | gawk -F '=' '{ print $1 }'`
    FOUND=`echo $DEP | gawk -F '=' '{ print $2 }'`
    if test "x$FOUND" = "xok"; then
      unset ${NAME}_msg
    fi
-   i=`expr $i + 1`
 done
 
 if test "x$HAVE_PSNR" = "xpnmpsnr"
 then
    OPT_DEPENDENCIES="ALL FOUND"
+   OPT_DEP_MSG="SUCCESS!!"
+   INSTALL_MSG="Type 'su -c \"make install\"' to compile and install vidprofile."
 else
    OPT_DEPENDENCIES="SOME MISSING"
+   OPT_DEP_MSG="PARTIAL PASS (the MISSING dependencies above are not supported)"
+   INSTALL_MSG="Type 'su -c \"make install\"' to compile and install vidprofile anyway."
 fi
 
 # ******************************************************************************
@@ -181,5 +187,8 @@ FINAL SUMMARY
   Required dependencies: ALL FOUND
 
   Optional dependencies: $OPT_DEPENDENCIES
-    pnmpsnr:       $PNMPSNR  $pnmpsnr_msg
+    pnmpsnr:       $PNMPSNR $pnmpsnr_msg
+
+$OPT_DEP_MSG
+  $INSTALL_MSG
 ])
