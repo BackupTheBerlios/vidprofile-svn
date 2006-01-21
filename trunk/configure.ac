@@ -1,4 +1,6 @@
 # Process this file with autoconf to produce a configure script.
+# Autoconf documentation:
+#     http://www.gnu.org/software/autoconf/manual/index.html
 
 # Copyright (C) 2005 Joe Friedrichsen <friedrij@users.berlios.de>
 # 
@@ -49,16 +51,14 @@ AM_INIT_AUTOMAKE
 # ******************************************************************************
 # ******************************************************************************
 
-# AC_MSG_CHECKING(feature-description)
-# AC_MSG_RESULT(result-description)
-# AC_PATH_PROG(variable, prog-to-check-for, [value-if-not-found])
-# AC_CHECK_PROG(variable, prog-to-check-for, value-if-found, 
-#               [value-if-not-found], [path-to-search], [reject])
-# AC_MSG_WARN([problem-description])
-
 # ******************************************************************************
 # Required Dependencies 
 # ******************************************************************************
+# How to add a dependency called foo: 
+#  (1) append another line to the AC_CHECK_PROG block to check for foo:
+#         AC_CHECK_PROG(FOO, [foo], [ok], [MISSING])
+#  (2) add another msg called foo_msg to the *_msg block 
+#  (3) add another name/variable pair to REQ_DEP_LIST: foo=$FOO
 
 AC_MSG_NOTICE([Checking for required dependencies...])
 AC_CHECK_PROG(GREP, [grep], [ok], [MISSING])
@@ -68,7 +68,7 @@ AC_CHECK_PROG(BC, [bc], [ok], [MISSING])
 
 # ------------------------------------------------------------------------------
 # Complain about missing required dependencies. If some are missing, list all
-# missing ones before failing and exiting.
+# missing ones and their _msg before failing and exiting.
 
 grep_msg="a GNU utility (http://www.gnu.org/software/grep)"
 mplayer_msg="part of mplayer (http://www.mplayerhq.hu)"
@@ -106,17 +106,24 @@ fi
 # ******************************************************************************
 # Optional Dependencies 
 # ******************************************************************************
+# To add a new depedency called bar:
+#  (1) append another line to the AC_CHECK_PROG block to check for bar:
+#         AC_CHECK_PROG(BAR, [bar], [ok], [MISSING])
+#  (2) add another msg called bar_msg to the *_msg block 
+#  (3) add another test to the catagory's build option:
+#         test "x$FOO" = "xok"
+#  (4) add another name/variable pair to OPT_DEP_LIST: bar=$BAR
 
 AC_MSG_NOTICE([Checking for optional dependencies...])
+
+# ------------------------------------------------------------------------------
+# Check for Peak Signal to Noise Ratio dependencies
+AC_CHECK_PROG(PNMPSNR, [pnmpsnr], [ok], [MISSING])
 
 # ------------------------------------------------------------------------------
 # Disabled messages given to user in the FINAL SUMMARY when a dependency cannot
 # be found.
 pnmpsnr_msg="(cannot measure PSNR)"
-
-# ------------------------------------------------------------------------------
-# Check for Peak Signal to Noise Ratio dependencies
-AC_CHECK_PROG(PNMPSNR, [pnmpsnr], [ok], [MISSING])
 
 if test "x$PNMPSNR" = "xok"; then
    HAVE_PSNR="pnmpsnr"
