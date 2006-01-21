@@ -17,40 +17,42 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-bin_SCRIPTS = \
-    lib-vidprofile \
-    profile \
-    psnrcore \
-    vidpsnr
+# List the source files for each shell script to be built and 
+# installed. Correct names are automatically created for the 
+# build process, as well as install directives.
 
-CLEANFILES = $(bin_SCRIPTS)
-
-EXTRA_DIST = \
-    lib-vidprofile.sh.in \
+sh_source = \
+    lib-vidprofile.sh \
     profile.sh \
     psnrcore.sh \
     vidpsnr.sh
 
-lib-vidprofile: $(srcdir)/lib-vidprofile.sh
-	rm -f "lib-vidprofile"
-	echo "#! `which env` sh"  > lib-vidprofile
-	cat $(srcdir)/lib-vidprofile.sh >> lib-vidprofile
-	chmod ugo+x lib-vidprofile
+################### LEAVE BELOW ALONE #########################
 
-profile: $(srcdir)/profile.sh
-	rm -f "profile"
-	echo "#! `which env` sh"  > profile
-	cat $(srcdir)/profile.sh >> profile
-	chmod ugo+x profile
+# No need to modify anything below! The above list can 
+# handle an arbitrary amount of shell scripts.
+# Everything is correctly built, installed, and cleaned so long
+# as the source files have a .sh suffix for shell scripts.
 
-psnrcore: $(srcdir)/psnrcore.sh
-	rm -f "psnrcore"
-	echo "#! `which env` sh"  > psnrcore
-	cat $(srcdir)/psnrcore.sh >> psnrcore
-	chmod ugo+x psnrcore
+# Strip the source file extentions. A built file will be called
+# by the basename of its source.
+#   eg: profile.sh becomes made and installed as profile
+sh_bin = $(basename $(sh_source))
 
-vidpsnr: $(srcdir)/vidpsnr.sh
-	rm -f "vidpsnr"
-	echo "#! `which env` sh"  > vidpsnr
-	cat $(srcdir)/vidpsnr.sh >> vidpsnr
-	chmod ugo+x vidpsnr
+# Specify the scripts to make and install.
+bin_SCRIPTS = $(sh_bin)
+
+# Clean the built scripts only. Leave the source files alone.
+CLEANFILES = $(bin_SCRIPTS)
+
+# Distribute the source files so the suite can be built!
+EXTRA_DIST = $(sh_source)
+
+# Make all the shell scripts.
+# These are Static Pattern Rules, found at:
+# http://www.gnu.org/software/make/manual/html_mono/make.html#SEC47
+$(sh_bin): %: %.sh
+	rm -f "$@"
+	echo "#! `which env` sh"  > $@
+	cat $(srcdir)/$< >> $@
+	chmod ugo+x $@

@@ -88,6 +88,9 @@ if test "$PNMPSNR" = "no-pnmpsnr"; then
 ])
 fi
 
+AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile src/lib-vidprofile.sh])
+AC_OUTPUT
+
 # ******************************************************************************
 # ******************************************************************************
 #
@@ -109,6 +112,3 @@ FINAL SUMMARY
   Optional dependencies
     pnmpsnr:            $HAVE_PNMPSNR
 ])
-
-AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile src/lib-vidprofile.sh])
-AC_OUTPUT

@@ -24,8 +24,8 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 rm -rvf "autom4te.cache"
-rm -rvf aclocal.m4 configure Makefile.in \
-        confdefs.h config.log config.status
+rm -rvf aclocal.m4 config.log config.status configure \
+        Makefile Makefile.in
 rm -rvf src/Makefile src/Makefile.in
 rm -rvf doc/Makefile doc/Makefile.in
 
