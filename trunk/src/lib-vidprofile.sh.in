@@ -43,7 +43,7 @@
 # ******************************************************************************
  
 VIDPROFILE_VERSION="@VERSION@"
-BUILD_OPTS="core @HAVE_PNMPSNR@"
+BUILD_OPTS="@BUILD_OPTS@"
 
 VIDPROFILE_HOME="$HOME/.vidprofile"
 
@@ -89,7 +89,8 @@ precho()
 # ******************************************************************************
 check_optional_dependency()
 {
-  if echo "$BUILD_OPTS" | grep "no-$1" >> /dev/null 2>&1; then
+  if echo "$BUILD_OPTS" | grep "$1" >> /dev/null 2>&1; then :
+  else
      exit_with_error "Not suported! \"$2\" requires \"$1\". Install $1 and recompile."
   fi
 }

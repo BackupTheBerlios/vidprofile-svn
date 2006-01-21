@@ -1,3 +1,13 @@
+2006-01-21 Joe Friedrichsen <friedrij@users.berlios.de>
+ * src/Makefile.am:
+     Use Static Pattern Rules to simplify and generalze
+          shell script building.
+
+  * configure.ac:
+     Cleaned up dependency finding: more generalized if additional
+          dependencies are added later. More helpful final summary
+          written.
+
 2005-12-06 Joe Friedrichsen <friedrij@users.berlios.de>
  vidprofile-0.80 released on berlios.de.
 
