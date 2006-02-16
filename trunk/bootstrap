@@ -28,8 +28,6 @@ make distclean
 rm -rvf "autom4te.cache"
 rm -rvf aclocal.m4 config.log config.status configure \
         Makefile Makefile.in
-rm -rvf src/Makefile src/Makefile.in
-rm -rvf doc/Makefile doc/Makefile.in
 
 aclocal \
 && automake --gnu --add-missing \

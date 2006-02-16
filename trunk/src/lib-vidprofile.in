@@ -1,4 +1,4 @@
-# -* sh *-
+#! /bin/sh
  
 # vidprofile suite
 # A set of scripts that profile a given input video with mpeg2enc. Multiple 

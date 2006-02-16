@@ -17,6 +17,21 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-SUBDIRS = doc src
+bin_SCRIPTS = \
+    src/lib-vidprofile \
+    src/profile \
+    src/psnrcore \
+    src/vidpsnr
 
-EXTRA_DIST = bootstrap
+man1_MANS = \
+    doc/profile.man \
+    doc/psnrcore.man \
+    doc/vidpsnr.man
+    
+EXTRA_DIST = \
+    $(bin_SCRIPTS) \
+    $(man1_MANS)
+
+# src/lib-vidprofile not needed b/c ./configure derives it from src/lib-vidprofile.in
+dist-hook:
+	rm -rvf $(top_distdir)/src/lib-vidprofile

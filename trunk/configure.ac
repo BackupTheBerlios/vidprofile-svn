@@ -34,7 +34,7 @@
 #                         the version number is also substituted into 
 #                         lib-vidprofile.sh.in
 AC_INIT([vidprofile], [svn])
-AC_CONFIG_SRCDIR([src/profile.sh])
+AC_CONFIG_SRCDIR([src/profile])
 
 AM_INIT_AUTOMAKE
 
@@ -176,7 +176,7 @@ BUILD_OPTS="core$BUILD_OPTS"
 # be replaced with VALUE
 AC_SUBST(BUILD_OPTS)
 
-AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile src/lib-vidprofile.sh])
+AC_CONFIG_FILES([Makefile src/lib-vidprofile])
 AC_OUTPUT
 
 # ******************************************************************************
