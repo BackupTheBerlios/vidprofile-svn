@@ -93,7 +93,6 @@ FINAL SUMMARY
 
 SUCCESS!!
   Type 'su -c "make install"' to compile and install vidprofile.
-
 ```
 
 Then compile and install your properly configured package:
