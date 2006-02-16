@@ -86,26 +86,19 @@ $ ./configure
 ```
 FINAL SUMMARY
 
-  Required dependencies
-    grep:               /bin/grep
-    mplayer:            /usr/local/bin/mplayer
-    mpeg2enc:           /usr/bin/mpeg2enc
-    bc:                 /usr/bin/bc
+  Required dependencies: ALL FOUND
 
-  Optional dependencies
-    pnmpsnr:            pnmpsnr
+  Optional dependencies: ALL FOUND
+    pnmpsnr:       ok
 
-configure: creating ./config.status
-config.status: creating Makefile
-config.status: creating src/Makefile
-config.status: creating doc/Makefile
-config.status: creating src/lib-vidprofile.sh
+SUCCESS!!
+  Type 'su -c "make install"' to compile and install vidprofile.
+
 ```
 
 Then compile and install your properly configured package:
 
 ```
-$ make
 $ su -c "make install"
 ```
 
